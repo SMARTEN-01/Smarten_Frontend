@@ -8,7 +8,7 @@ export const useLeakAlerts = () => {
   const reconnectInterval = 5000; // 5 seconds
 
   const connectWebSocket = () => {
-    const WS_BASE = import.meta.env.VITE_WS_BASE || "ws://localhost:5173";
+    const WS_BASE = import.meta.env.VITE_WS_BASE ;
     const socket = new WebSocket(`${WS_BASE}/ws/leak-alerts/`);
     socketRef.current = socket;
 
