@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE = "/api"; // Relative path via proxy
+// const API_BASE = "/api"; // Relative path via proxy
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 // Create Axios instance with credentials for authenticated requests
 export const api = axios.create({
@@ -149,14 +150,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config || {};
     const status = error.response?.status;
+    const url = originalRequest.url || '';
 
-    if ((status === 401 || status === 403) && !originalRequest._retry) {
+    // Never retry the refresh endpoint itself — prevents infinite loops
+    const isRefreshEndpoint = url.includes('/auth/refresh/');
+
+    if ((status === 401 || status === 403) && !originalRequest._retry && !isRefreshEndpoint) {
       originalRequest._retry = true;
 
       if (isRefreshing) {
         // Queue the request until the token is refreshed
         return new Promise((resolve, reject) => {
-          pendingQueue.push({
+          pendingRequests.push({   // ← was wrongly named pendingQueue
             resolve: () => resolve(api(originalRequest)),
             reject: (err) => reject(err),
           });
@@ -169,6 +174,8 @@ api.interceptors.response.use(
         return api(originalRequest); // Retry with refreshed cookies
       } catch (refreshError) {
         console.error("Token refresh failed, redirecting to login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

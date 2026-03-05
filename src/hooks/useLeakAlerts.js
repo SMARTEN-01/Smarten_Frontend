@@ -8,11 +8,12 @@ export const useLeakAlerts = () => {
   const reconnectInterval = 5000; // 5 seconds
 
   const connectWebSocket = () => {
-    const socket = new WebSocket("ws://localhost:5173/ws/leak-alerts/");
+    const WS_BASE = import.meta.env.VITE_WS_BASE || "ws://localhost:5173";
+    const socket = new WebSocket(`${WS_BASE}/ws/leak-alerts/`);
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log("✅ WebSocket connected: ws://localhost:5173/ws/leak-alerts/");
+      console.log(`✅ WebSocket connected: ${WS_BASE}/ws/leak-alerts/`);
       reconnectAttempts.current = 0; // Reset reconnect attempts on successful connection
     };
 
@@ -32,7 +33,7 @@ export const useLeakAlerts = () => {
     };
 
     socket.onclose = () => {
-      console.log("⚠️ WebSocket closed: ws://127.0.0.1:8000/ws/leak-alerts/");
+      console.log(`⚠️ WebSocket closed: ${WS_BASE}/ws/leak-alerts/`);
       if (reconnectAttempts.current < maxReconnectAttempts) {
         setTimeout(() => {
           console.log(`Attempting to reconnect (${reconnectAttempts.current + 1}/${maxReconnectAttempts})...`);

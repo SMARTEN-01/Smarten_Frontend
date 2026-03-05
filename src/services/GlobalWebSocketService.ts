@@ -93,10 +93,11 @@ class GlobalWebSocketService {
   // Create a new WebSocket connection for a province
   private async createConnection(province: string): Promise<void> {
     // Prefer cookies, fallback to query parameter if token is available
-    let wsUrl = `ws://localhost:5173/ws/water-readings/${province}`;
+    const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://localhost:5173';
+    let wsUrl = `${WS_BASE}/ws/water-readings/${province}`;
     const accessToken = this.getAccessToken();
     if (accessToken) {
-      wsUrl = `ws://localhost:5173/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
+      wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
       console.log(`Using query parameter for token: ${accessToken.slice(0, 10)}...`);
     } else {
       console.log(`Relying on HTTP-only cookie for ${wsUrl}`);

@@ -368,13 +368,11 @@ const Leakage = () => {
 
   // WebSocket connection for notifications
   useEffect(() => {
-    // Mock WebSocket connection - replace with actual WebSocket URL
-    const ws = new WebSocket('ws://127.0.0.1:8000/ws/leak-alerts/');
-    
+    const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://127.0.0.1:8000';
+    const ws = new WebSocket(`${WS_BASE}/ws/leak-alerts/`);
     ws.onopen = () => {
       console.log('WebSocket connected');
     };
-    
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
@@ -384,15 +382,12 @@ const Leakage = () => {
         console.error('Error parsing WebSocket message:', error);
       }
     };
-    
     ws.onclose = () => {
       console.log('WebSocket disconnected');
     };
-    
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
-    
     return () => {
       ws.close();
     };
