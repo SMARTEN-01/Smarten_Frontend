@@ -186,7 +186,7 @@ class GlobalWebSocketService {
     connection.reconnectAttempts++;
     const delay = this.reconnectDelay * connection.reconnectAttempts;
 
-    console.log(`🔄 Scheduling reconnect for ${province} in ${delay}ms (attempt ${connection.reconnectAttempts}/${this.maxReconnectAttempts})`);
+    // console.log(`🔄 Scheduling reconnect for ${province} in ${delay}ms (attempt ${connection.reconnectAttempts}/${this.maxReconnectAttempts})`);
 
     setTimeout(() => {
       this.createConnection(province);

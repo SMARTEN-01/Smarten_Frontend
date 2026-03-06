@@ -2,7 +2,7 @@ export const createWebSocket = (url, onMessage) => {
     const socket = new WebSocket(url);
   
     socket.onopen = () => {
-      console.log("✅ WebSocket connected:", url);
+      // console.log("✅ WebSocket connected:", url);
     };
   
     socket.onmessage = (event) => {
