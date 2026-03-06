@@ -96,12 +96,12 @@ class GlobalWebSocketService {
     const WS_BASE = import.meta.env.VITE_WS_BASE ;
     let wsUrl = `${WS_BASE}/ws/water-readings/${province}`;
     const accessToken = this.getAccessToken();
-    if (accessToken) {
-      wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
-      // console.log(`Using query parameter for token: ${accessToken.slice(0, 10)}...`);
-    } else {
-      // console.log(`Relying on HTTP-only cookie for ${wsUrl}`);
+    if (!accessToken) {
+      console.log(`WebSocket not started for ${province}: user not authenticated`);
+      return; // stop here
     }
+
+     wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
 
     // console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
@@ -174,24 +174,33 @@ class GlobalWebSocketService {
   }
 
   // Schedule a reconnection attempt
-  private scheduleReconnect(province: string): void {
-    const connection = this.connections.get(province);
-    if (!connection) return;
+private scheduleReconnect(province: string): void {
+  const connection = this.connections.get(province);
+  if (!connection) return;
 
-    if (connection.reconnectAttempts >= this.maxReconnectAttempts) {
-      // console.error(`Max reconnect attempts reached for ${province}`);
-      return;
+  // Stop if max attempts reached
+  if (connection.reconnectAttempts >= this.maxReconnectAttempts) {
+    // Optionally log only in development
+    if (import.meta.env.MODE === "development") {
+      console.warn(`Max reconnect attempts reached for ${province}`);
     }
-
-    connection.reconnectAttempts++;
-    const delay = this.reconnectDelay * connection.reconnectAttempts;
-
-    // console.log(`🔄 Scheduling reconnect for ${province} in ${delay}ms (attempt ${connection.reconnectAttempts}/${this.maxReconnectAttempts})`);
-
-    setTimeout(() => {
-      this.createConnection(province);
-    }, delay);
+    return;
   }
+
+  connection.reconnectAttempts++;
+
+  // Exponential backoff: delay grows with attempts, max 30s
+  const delay = Math.min(this.reconnectDelay * connection.reconnectAttempts, 30000);
+
+  // Schedule reconnect without spamming the console
+  setTimeout(() => {
+    // Only reconnect if user is authenticated
+    const accessToken = this.getAccessToken();
+    if (!accessToken) return;
+
+    this.createConnection(province);
+  }, delay);
+}
 
   // Close a specific connection
   private closeConnection(province: string): void {
