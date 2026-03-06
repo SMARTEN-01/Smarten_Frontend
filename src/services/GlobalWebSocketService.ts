@@ -98,12 +98,12 @@ class GlobalWebSocketService {
     const accessToken = this.getAccessToken();
     if (accessToken) {
       wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
-      console.log(`Using query parameter for token: ${accessToken.slice(0, 10)}...`);
+      // console.log(`Using query parameter for token: ${accessToken.slice(0, 10)}...`);
     } else {
-      console.log(`Relying on HTTP-only cookie for ${wsUrl}`);
+      // console.log(`Relying on HTTP-only cookie for ${wsUrl}`);
     }
 
-    console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
+    // console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
     const connection: WebSocketConnection = {
       socket,
@@ -116,7 +116,7 @@ class GlobalWebSocketService {
     this.connections.set(province, connection);
 
     socket.onopen = () => {
-      console.log(`✅ Global WebSocket connected: ${wsUrl}`);
+      // console.log(`✅ Global WebSocket connected: ${wsUrl}`);
       connection.isConnected = true;
       connection.reconnectAttempts = 0;
     };
@@ -133,22 +133,22 @@ class GlobalWebSocketService {
             try {
               callback(data);
             } catch (error) {
-              console.error(`Error in WebSocket subscriber for ${province}:`, error);
+              // console.error(`Error in WebSocket subscriber for ${province}:`, error);
             }
           });
         }
       } catch (error) {
-        console.error(`Error parsing WebSocket message for ${province}:`, error);
+        // console.error(`Error parsing WebSocket message for ${province}:`, error);
       }
     };
 
     socket.onerror = (error) => {
-      console.error(`❌ Global WebSocket error for ${province}:`, error);
+      // console.error(`❌ Global WebSocket error for ${province}:`, error);
       connection.isConnected = false;
     };
 
     socket.onclose = async (event) => {
-      console.log(`⚠️ Global WebSocket closed for ${province}: Code ${event.code}, Reason: ${event.reason}`);
+      // console.log(`⚠️ Global WebSocket closed for ${province}: Code ${event.code}, Reason: ${event.reason}`);
       connection.isConnected = false;
 
       // Handle token expiration (code 4001 from backend)
@@ -156,11 +156,11 @@ class GlobalWebSocketService {
         console.log('Access token expired, attempting to refresh');
         try {
           await refreshAccessToken();
-          console.log('Token refresh successful, retrying WebSocket connection');
+          // console.log('Token refresh successful, retrying WebSocket connection');
           await this.createConnection(province);
           return;
         } catch (error) {
-          console.error('Token refresh failed:', error);
+          // console.error('Token refresh failed:', error);
           window.location.href = '/login';
         }
       }
@@ -179,7 +179,7 @@ class GlobalWebSocketService {
     if (!connection) return;
 
     if (connection.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error(`Max reconnect attempts reached for ${province}`);
+      // console.error(`Max reconnect attempts reached for ${province}`);
       return;
     }
 
@@ -197,7 +197,7 @@ class GlobalWebSocketService {
   private closeConnection(province: string): void {
     const connection = this.connections.get(province);
     if (connection) {
-      console.log(`🔌 Closing WebSocket connection for ${province}`);
+      // console.log(`🔌 Closing WebSocket connection for ${province}`);
       connection.socket.close();
       this.connections.delete(province);
     }
@@ -215,7 +215,7 @@ class GlobalWebSocketService {
         if (timeSinceLastMessage > staleThreshold && this.subscribers.has(province)) {
           const provinceSubscribers = this.subscribers.get(province);
           if (provinceSubscribers && provinceSubscribers.size > 0) {
-            console.log(`🔄 Reconnecting stale connection for ${province}`);
+            // console.log(`🔄 Reconnecting stale connection for ${province}`);
             this.createConnection(province);
           }
         }
