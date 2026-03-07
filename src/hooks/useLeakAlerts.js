@@ -9,7 +9,10 @@ export const useLeakAlerts = () => {
 
   const connectWebSocket = () => {
     const WS_BASE = import.meta.env.VITE_WS_BASE ;
-    const socket = new WebSocket(`${WS_BASE}/ws/leak-alerts/`);
+    const accessToken = document.cookie.match(/accessToken=([^;]*)/);
+    const token = accessToken ? accessToken[1] : null;
+    const wsUrl = token ? `${WS_BASE}/ws/leak-alerts/?token=${encodeURIComponent(token)}` : `${WS_BASE}/ws/leak-alerts/`;
+    const socket = new WebSocket(wsUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {

@@ -47,9 +47,21 @@ class GlobalWebSocketService {
     this.startGlobalReconnectMonitoring();
   }
 
-  // Get access token from localStorage (fallback if cookies fail)
+  // Get access token from cookies (matching your auth system)
   private getAccessToken(): string | null {
-    return localStorage.getItem('accessToken') || null;
+    try {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'accessToken') {
+          return decodeURIComponent(value);
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error('Error reading cookies:', error);
+      return null;
+    }
   }
 
   // Subscribe to data for a specific province
