@@ -51,16 +51,12 @@ class GlobalWebSocketService {
   private getAccessToken(): string | null {
     try {
       const cookies = document.cookie.split(';');
-      console.log('Available cookies:', document.cookie);
       for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
         if (name === 'accessToken') {
-          const token = decodeURIComponent(value);
-          console.log('Found accessToken in cookies:', token.substring(0, 20) + '...');
-          return token;
+          return decodeURIComponent(value);
         }
       }
-      console.log('No accessToken found in cookies');
       return null;
     } catch (error) {
       console.error('Error reading cookies:', error);
@@ -68,14 +64,50 @@ class GlobalWebSocketService {
     }
   }
 
+  // Get token via API call when HttpOnly cookies prevent JavaScript access
+  private async getTokenViaApi(): Promise<string | null> {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/validate-token/`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        // If validation succeeds, cookies are present - we need to get token another way
+        // For WebSocket connections, we'll use a temporary token endpoint
+        const tempTokenResponse = await fetch(`${import.meta.env.VITE_API_BASE}/auth/get-ws-token/`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+        
+        if (tempTokenResponse.ok) {
+          const data = await tempTokenResponse.json();
+          return data.token;
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting token via API:', error);
+      return null;
+    }
+  }
+
   // Wait for cookies to be available (handles timing issues)
   private async waitForToken(maxRetries = 3, delay = 500): Promise<string | null> {
     for (let i = 0; i < maxRetries; i++) {
+      // First try to read from cookies
       const token = this.getAccessToken();
       if (token) return token;
       
+      // If no token in cookies, try API fallback (for HttpOnly cookies)
+      if (i === 1) { // Try API on second attempt
+        console.log('Cookie not readable, trying API fallback...');
+        const apiToken = await this.getTokenViaApi();
+        if (apiToken) return apiToken;
+      }
+      
       if (i < maxRetries - 1) {
-        console.log(`Waiting for accessToken cookie... attempt ${i + 1}/${maxRetries}`);
+        console.log(`Waiting for accessToken... attempt ${i + 1}/${maxRetries}`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
@@ -313,6 +345,22 @@ private scheduleReconnect(province: string): void {
 
 // Create a singleton instance
 export const globalWebSocketService = new GlobalWebSocketService();
+
+// Debug function to test cookie availability
+export const debugCookieAvailability = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/debug-cookies/`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await response.json();
+    console.log('🔍 Cookie Debug Info:', data);
+    return data;
+  } catch (error) {
+    console.error('Debug cookie error:', error);
+    return null;
+  }
+};
 
 // Initialize connections for all provinces after a short delay to ensure auth is ready
 setTimeout(() => {

@@ -10,15 +10,33 @@ export const useLeakAlerts = () => {
   const connectWebSocket = async () => {
     const WS_BASE = import.meta.env.VITE_WS_BASE ;
     
-    // Wait for token with retry mechanism
+    // Wait for token with retry mechanism and API fallback
     const waitForToken = async (maxRetries = 3, delay = 500) => {
       for (let i = 0; i < maxRetries; i++) {
+        // First try to read from cookies
         const accessToken = document.cookie.match(/accessToken=([^;]*)/);
         const token = accessToken ? accessToken[1] : null;
         if (token) return token;
         
+        // If no token in cookies, try API fallback (for HttpOnly cookies)
+        if (i === 1) { // Try API on second attempt
+          console.log('Cookie not readable for leak alerts, trying API fallback...');
+          try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/get-ws-token/`, {
+              method: 'GET',
+              credentials: 'include'
+            });
+            if (response.ok) {
+              const data = await response.json();
+              return data.token;
+            }
+          } catch (error) {
+            console.error('API fallback failed for leak alerts:', error);
+          }
+        }
+        
         if (i < maxRetries - 1) {
-          console.log(`Waiting for accessToken cookie for leak alerts... attempt ${i + 1}/${maxRetries}`);
+          console.log(`Waiting for accessToken for leak alerts... attempt ${i + 1}/${maxRetries}`);
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
