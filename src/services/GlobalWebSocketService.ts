@@ -51,17 +51,35 @@ class GlobalWebSocketService {
   private getAccessToken(): string | null {
     try {
       const cookies = document.cookie.split(';');
+      console.log('Available cookies:', document.cookie);
       for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
         if (name === 'accessToken') {
-          return decodeURIComponent(value);
+          const token = decodeURIComponent(value);
+          console.log('Found accessToken in cookies:', token.substring(0, 20) + '...');
+          return token;
         }
       }
+      console.log('No accessToken found in cookies');
       return null;
     } catch (error) {
       console.error('Error reading cookies:', error);
       return null;
     }
+  }
+
+  // Wait for cookies to be available (handles timing issues)
+  private async waitForToken(maxRetries = 3, delay = 500): Promise<string | null> {
+    for (let i = 0; i < maxRetries; i++) {
+      const token = this.getAccessToken();
+      if (token) return token;
+      
+      if (i < maxRetries - 1) {
+        console.log(`Waiting for accessToken cookie... attempt ${i + 1}/${maxRetries}`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    return null;
   }
 
   // Subscribe to data for a specific province
@@ -107,13 +125,15 @@ class GlobalWebSocketService {
     // Prefer cookies, fallback to query parameter if token is available
     const WS_BASE = import.meta.env.VITE_WS_BASE ;
     let wsUrl = `${WS_BASE}/ws/water-readings/${province}`;
-    const accessToken = this.getAccessToken();
+    
+    // Wait for token with retry mechanism
+    const accessToken = await this.waitForToken();
     if (!accessToken) {
-      console.log(`WebSocket not started for ${province}: user not authenticated`);
+      console.log(`WebSocket not started for ${province}: user not authenticated (no token in cookies)`);
       return; // stop here
     }
 
-     wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
+    wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
 
     // console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
@@ -294,5 +314,7 @@ private scheduleReconnect(province: string): void {
 // Create a singleton instance
 export const globalWebSocketService = new GlobalWebSocketService();
 
-// Initialize connections for all provinces on service creation
-globalWebSocketService.initializeAllConnections();
+// Initialize connections for all provinces after a short delay to ensure auth is ready
+setTimeout(() => {
+  globalWebSocketService.initializeAllConnections();
+}, 1000); // 1 second delay

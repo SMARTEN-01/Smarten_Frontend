@@ -7,10 +7,25 @@ export const useLeakAlerts = () => {
   const maxReconnectAttempts = 5;
   const reconnectInterval = 5000; // 5 seconds
 
-  const connectWebSocket = () => {
+  const connectWebSocket = async () => {
     const WS_BASE = import.meta.env.VITE_WS_BASE ;
-    const accessToken = document.cookie.match(/accessToken=([^;]*)/);
-    const token = accessToken ? accessToken[1] : null;
+    
+    // Wait for token with retry mechanism
+    const waitForToken = async (maxRetries = 3, delay = 500) => {
+      for (let i = 0; i < maxRetries; i++) {
+        const accessToken = document.cookie.match(/accessToken=([^;]*)/);
+        const token = accessToken ? accessToken[1] : null;
+        if (token) return token;
+        
+        if (i < maxRetries - 1) {
+          console.log(`Waiting for accessToken cookie for leak alerts... attempt ${i + 1}/${maxRetries}`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+      return null;
+    };
+    
+    const token = await waitForToken();
     const wsUrl = token ? `${WS_BASE}/ws/leak-alerts/?token=${encodeURIComponent(token)}` : `${WS_BASE}/ws/leak-alerts/`;
     const socket = new WebSocket(wsUrl);
     socketRef.current = socket;
