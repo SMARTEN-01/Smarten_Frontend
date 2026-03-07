@@ -67,23 +67,14 @@ class GlobalWebSocketService {
   // Get token via API call when HttpOnly cookies prevent JavaScript access
   private async getTokenViaApi(): Promise<string | null> {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/validate-token/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/get-ws-token/`, {
         method: 'GET',
         credentials: 'include'
       });
       
       if (response.ok) {
-        // If validation succeeds, cookies are present - we need to get token another way
-        // For WebSocket connections, we'll use a temporary token endpoint
-        const tempTokenResponse = await fetch(`${import.meta.env.VITE_API_BASE}/auth/get-ws-token/`, {
-          method: 'GET',
-          credentials: 'include'
-        });
-        
-        if (tempTokenResponse.ok) {
-          const data = await tempTokenResponse.json();
-          return data.token;
-        }
+        const data = await response.json();
+        return data.token;
       }
       return null;
     } catch (error) {
@@ -161,11 +152,13 @@ class GlobalWebSocketService {
     // Wait for token with retry mechanism
     const accessToken = await this.waitForToken();
     if (!accessToken) {
-      console.log(`WebSocket not started for ${province}: user not authenticated (no token in cookies)`);
+      console.log(`❌ WebSocket not started for ${province}: user not authenticated (no token)`);
       return; // stop here
     }
 
+    console.log(`✅ Token retrieved for ${province}, connecting WebSocket...`);
     wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
+    console.log(`🔗 WebSocket URL for ${province}: ${wsUrl.substring(0, 100)}...`);
 
     // console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
@@ -180,7 +173,7 @@ class GlobalWebSocketService {
     this.connections.set(province, connection);
 
     socket.onopen = () => {
-      // console.log(`✅ Global WebSocket connected: ${wsUrl}`);
+      console.log(`✅ Global WebSocket connected for ${province}: ${wsUrl.substring(0, 80)}...`);
       connection.isConnected = true;
       connection.reconnectAttempts = 0;
     };
@@ -189,6 +182,7 @@ class GlobalWebSocketService {
       try {
         const data: WaterReadingData = JSON.parse(event.data);
         connection.lastMessageTime = Date.now();
+        console.log(`📊 Received data for ${province}:`, data);
 
         // Notify all subscribers for this province
         const provinceSubscribers = this.subscribers.get(province);
@@ -197,22 +191,22 @@ class GlobalWebSocketService {
             try {
               callback(data);
             } catch (error) {
-              // console.error(`Error in WebSocket subscriber for ${province}:`, error);
+              console.error(`Error in WebSocket subscriber for ${province}:`, error);
             }
           });
         }
       } catch (error) {
-        // console.error(`Error parsing WebSocket message for ${province}:`, error);
+        console.error(`Error parsing WebSocket message for ${province}:`, error);
       }
     };
 
     socket.onerror = (error) => {
-      // console.error(`❌ Global WebSocket error for ${province}:`, error);
+      console.error(`❌ WebSocket error for ${province}:`, error);
       connection.isConnected = false;
     };
 
     socket.onclose = async (event) => {
-      // console.log(`⚠️ Global WebSocket closed for ${province}: Code ${event.code}, Reason: ${event.reason}`);
+      console.log(`⚠️ WebSocket closed for ${province}. Code: ${event.code}, Reason: ${event.reason}`);
       connection.isConnected = false;
 
       // Handle token expiration (code 4001 from backend)
