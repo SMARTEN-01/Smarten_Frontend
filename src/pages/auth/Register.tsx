@@ -29,6 +29,7 @@ const Register = () => {
   const { register } = useAuth();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({});
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -36,8 +37,12 @@ const Register = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === 'phone' ? parseInt(value) || 0 : value,
     });
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleRegister = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -45,10 +50,11 @@ const Register = () => {
     setIsLoading(true);
     setError("");
     setSuccess("");
+    setFieldErrors({});
   
     try {
     await register(formData);
-    setSuccess("✅ Registered successfully! Please check your email.");
+    setSuccess("✅ Account created successfully!");
     toast({
       title: "Account created",
       description: "Your account has been created successfully",
@@ -59,21 +65,38 @@ const Register = () => {
     }, 2000);
 
     }
-    catch (error) {
-      setError(error.response?.data?.message || "❌ Registration failed");
-      toast({
-        title: "Registration failed",
-        description: "Please enter valid credentials",
-        variant: "destructive",
-      });
-      console.log("Login failed ",error)
+    catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { field?: string; error?: string } }; message?: string };
+      const errorData = axiosError.response?.data;
+      
+      if (errorData?.field) {
+        // Handle field-specific errors
+        if (errorData.field === 'multiple') {
+          setError(errorData.error);
+        } else {
+          setFieldErrors(prev => ({ ...prev, [errorData.field]: errorData.error }));
+        }
+        
+        toast({
+          title: "Registration failed",
+          description: errorData.error,
+          variant: "destructive",
+        });
+      } else {
+        // Handle general errors
+        setError(errorData?.error || axiosError.message || "❌ Registration failed");
+        toast({
+          title: "Registration failed",
+          description: errorData?.error || "Please check your information and try again",
+          variant: "destructive",
+        });
+      }
+      
+      console.log("Registration failed ", error);
     }
     finally {
       setIsLoading(false);
     }
-
-
-
   };
 
   return (
@@ -118,6 +141,13 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
+          {/* General Error Message */}
+          {error && (
+            <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md dark:bg-red-900/20 dark:text-red-400 dark:border-red-800">
+              {error}
+            </div>
+          )}
+
           <div>
             <label htmlFor="firstName" className="block text-xs font-medium text-foreground mb-1">
               Business Name*
@@ -128,9 +158,14 @@ const Register = () => {
               name="name"
               onChange={handleChange}
               placeholder="WASAC"
-              className="w-full h-10 px-3 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full h-10 px-3 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition ${
+                fieldErrors.name ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+              }`}
               required
             />
+            {fieldErrors.name && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.name}</p>
+            )}
           </div>
 
           <div>
@@ -143,10 +178,16 @@ const Register = () => {
               name="email"
               onChange={handleChange}
               placeholder="e.g. wasac@gmail.com"
-              className="w-full h-10 px-3 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full h-10 px-3 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition ${
+                fieldErrors.email ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+              }`}
               required
             />
+            {fieldErrors.email && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.email}</p>
+            )}
           </div>
+          
           <div>
             <label htmlFor="lastName" className="block text-xs font-medium text-foreground mb-1">
               Business phone Number*
@@ -157,9 +198,14 @@ const Register = () => {
               name="phone"
               onChange={handleChange}
               placeholder="e.g. +250 7XXXXXXXX"
-              className="w-full h-10 px-3 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full h-10 px-3 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition ${
+                fieldErrors.phone ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+              }`}
               required
             />
+            {fieldErrors.phone && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.phone}</p>
+            )}
           </div>
 
           <div>
@@ -171,12 +217,15 @@ const Register = () => {
               type="text"
               name="registration_number"
               onChange={handleChange}
-              // placeholder="DD/MM/YY"
-              className="w-full h-10 px-3 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full h-10 px-3 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition ${
+                fieldErrors.registration_number ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+              }`}
               required
             />
+            {fieldErrors.registration_number && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.registration_number}</p>
+            )}
           </div>
-
 
           <div>
             <label htmlFor="password" className="block text-xs font-medium text-foreground mb-1">
@@ -188,7 +237,9 @@ const Register = () => {
                 type={showPassword ? 'text' : 'password'}
                 name='password'
                 onChange={handleChange}
-                className="w-full h-10 px-3 pr-10 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className={`w-full h-10 px-3 pr-10 border rounded-md focus:ring-1 focus:ring-blue-500 bg-background text-foreground dark-mode-transition ${
+                  fieldErrors.password ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+                }`}
                 required
               />
               <button
@@ -199,7 +250,9 @@ const Register = () => {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-           
+            {fieldErrors.password && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.password}</p>
+            )}
           </div>
 
           <div className="pt-2">

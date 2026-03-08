@@ -22,6 +22,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({});
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -31,6 +32,10 @@ const Login = () => {
       ...formData,
       [name]: value,
     });
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleLogin = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +43,7 @@ const Login = () => {
     setIsLoading(true);
     setError("");
     setSuccess("");
+    setFieldErrors({});
   
     try {
       
@@ -52,14 +58,33 @@ const Login = () => {
     }, 1000);
 
     }
-    catch (error) {
-      setError(error|| "❌ Login failed");
-      toast({
-        title: "Login failed",
-        description: "Please enter valid credentials",
-        variant: "destructive",
-      });
-      console.log("Login failed ",error)
+    catch (error: any) {
+      const errorData = error.response?.data;
+      
+      if (errorData?.field) {
+        // Handle field-specific errors
+        if (errorData.field === 'both' || errorData.field === 'multiple') {
+          setError(errorData.error);
+        } else {
+          setFieldErrors(prev => ({ ...prev, [errorData.field]: errorData.error }));
+        }
+        
+        toast({
+          title: "Login failed",
+          description: errorData.error,
+          variant: "destructive",
+        });
+      } else {
+        // Handle general errors
+        setError(errorData?.error || error?.message || "❌ Login failed");
+        toast({
+          title: "Login failed",
+          description: errorData?.error || "Please check your credentials and try again",
+          variant: "destructive",
+        });
+      }
+      
+      console.log("Login failed ", error);
     }
     finally {
       setIsLoading(false);
@@ -110,6 +135,13 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
+          {/* General Error Message */}
+          {error && (
+            <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md dark:bg-red-900/20 dark:text-red-400 dark:border-red-800">
+              {error}
+            </div>
+          )}
+
           <div>
             <label htmlFor="email" className="block text-xs font-medium text-foreground mb-1">
               Email*
@@ -120,9 +152,14 @@ const Login = () => {
               name='email'
               onChange={handleChange}
               placeholder="e.g Jasper"
-              className="w-full h-10 px-3 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition"
+              className={`w-full h-10 px-3 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground dark-mode-transition ${
+                fieldErrors.email ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+              }`}
               required
             />
+            {fieldErrors.email && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.email}</p>
+            )}
           </div>
 
           <div>
@@ -135,7 +172,9 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 name='password'
                 onChange={handleChange}
-                className="w-full h-10 px-3 pr-10 border-border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className={`w-full h-10 px-3 pr-10 border rounded-md focus:ring-1 focus:ring-blue-500 ${
+                  fieldErrors.password ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-border'
+                }`}
                 required
               />
               <button
@@ -146,6 +185,9 @@ const Login = () => {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+            {fieldErrors.password && (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fieldErrors.password}</p>
+            )}
             <div className="text-right mt-1">
               <Link to="/forgot-password" className="text-xs text-blue-500 hover:text-blue-600">
                 Forgot password?

@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://0.0.0.0:8000',
         changeOrigin: true,
         // rewrite: (p) => p.replace(/^\/api/, ''), // Remove /api prefix
         configure: (proxy) => {
@@ -22,20 +22,19 @@ export default defineConfig(({ mode }) => ({
         },
       },
       '/ws': {
-  target: 'ws://127.0.0.1:8000',
-  changeOrigin: true,
-  ws: true,
-  secure: false,
-  configure: (proxy) => {
-    proxy.on('proxyReqWs', (proxyReq, req) => {
-      console.log(`[Vite Proxy] Forwarding WS: ${req.url}`);
-      if (req.headers.cookie) {
-        proxyReq.setHeader('cookie', req.headers.cookie);
-      }
-    });
-  },
-},
-
+        target: 'ws://0.0.0.0:8000',
+        changeOrigin: true,
+        ws: true,
+        secure: false,
+        configure: (proxy) => {
+          proxy.on('proxyReqWs', (proxyReq, req) => {
+            console.log(`[Vite Proxy] Forwarding WS: ${req.url}`);
+            if (req.headers.cookie) {
+              proxyReq.setHeader('cookie', req.headers.cookie);
+            }
+          });
+        },
+      },
     },
   },
   plugins: [
