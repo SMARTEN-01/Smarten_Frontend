@@ -6,7 +6,7 @@ import { Clock, Activity, ChevronDown, RefreshCw, AlertTriangle, Trash2, Droplet
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts';
 import {useWaterReadings} from '@/hooks/useWaterReadings';
 import { useMonitorData } from '@/contexts/MonitorDataContext';
-import { simulateWater, simulateLeakage } from '@/services/api';
+import { simulateWater, simulateLeakage, stopSimulateWater, stopSimulateLeakage } from '@/services/api';
 
 // Import province icons
 import NorthIcon from '../../../Smarten Assets/assets/North.svg';
@@ -347,6 +347,8 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
 
   const [isSimulatingWater, setIsSimulatingWater] = useState(false);
   const [isSimulatingLeakage, setIsSimulatingLeakage] = useState(false);
+  const [isSimulatingWater, setIsSimulatingWater] = useState(false);
+  const [isSimulatingLeakage, setIsSimulatingLeakage] = useState(false);
 
   const handleSimulateWater = async () => {
     setIsSimulatingWater(true);
@@ -355,6 +357,15 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
       // Optional: show a toast or message
     } catch (err) {
       console.error('Error simulating water:', err);
+      setIsSimulatingWater(false);
+    }
+  };
+
+  const handleStopSimulateWater = async () => {
+    try {
+      await stopSimulateWater();
+    } catch (err) {
+      console.error('Error stopping water simulation:', err);
     } finally {
       setIsSimulatingWater(false);
     }
@@ -367,6 +378,15 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
       // Optional: show a toast or message
     } catch (err) {
       console.error('Error simulating leakage:', err);
+      setIsSimulatingLeakage(false);
+    }
+  };
+
+  const handleStopSimulateLeakage = async () => {
+    try {
+      await stopSimulateLeakage();
+    } catch (err) {
+      console.error('Error stopping leakage simulation:', err);
     } finally {
       setIsSimulatingLeakage(false);
     }
@@ -414,27 +434,41 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
             })}
           </div>
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSimulateWater}
-            disabled={isSimulatingWater}
-            className="flex items-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
-          >
-            <Droplets className={`w-4 h-4 ${isSimulatingWater ? 'animate-pulse' : ''}`} />
-            {isSimulatingWater ? 'Simulating...' : 'Simulate Water'}
-          </Button>
+          <div className="flex gap-1 items-center border-r pr-2 mr-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSimulateWater}
+                disabled={isSimulatingWater}
+                className="flex items-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
+              >
+                <Droplets className={`w-4 h-4 ${isSimulatingWater ? 'animate-pulse' : ''}`} />
+                {isSimulatingWater ? 'Simulating...' : 'Simulate'}
+              </Button>
+              {isSimulatingWater && (
+                <Button variant="outline" size="sm" onClick={handleStopSimulateWater} className="text-red-500 border-red-200 hover:bg-red-50">
+                    Stop
+                </Button>
+              )}
+          </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSimulateLeakage}
-            disabled={isSimulatingLeakage}
-            className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-          >
-            <Zap className={`w-4 h-4 ${isSimulatingLeakage ? 'animate-pulse' : ''}`} />
-            {isSimulatingLeakage ? 'Simulating...' : 'Simulate Leakage'}
-          </Button>
+          <div className="flex gap-1 items-center border-r pr-2 mr-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSimulateLeakage}
+                disabled={isSimulatingLeakage}
+                className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+              >
+                <Zap className={`w-4 h-4 ${isSimulatingLeakage ? 'animate-pulse' : ''}`} />
+                {isSimulatingLeakage ? 'Simulating...' : 'Simulate Leakage'}
+              </Button>
+              {isSimulatingLeakage && (
+                <Button variant="outline" size="sm" onClick={handleStopSimulateLeakage} className="text-red-500 border-red-200 hover:bg-red-50">
+                    Stop
+                </Button>
+              )}
+          </div>
 
           <Button
             variant="outline"

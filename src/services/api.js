@@ -294,6 +294,8 @@ export const getLastHourAverage = () => api.get("/monitoring/last-hour-average/"
 export const getCriticalReadings = () => api.get("/monitoring/critical-readings/");
 export const simulateWater = () => api.post("/monitoring/simulate-water/");
 export const simulateLeakage = () => api.post("/monitoring/simulate-leakage/");
+export const stopSimulateWater = () => api.post("/monitoring/stop-simulate-water/");
+export const stopSimulateLeakage = () => api.post("/monitoring/stop-simulate-leakage/");
 
 // Commands
 export const sendCommand = (data) => api.post("/control/send-command/", data);
