@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Clock, Activity, ChevronDown, RefreshCw, AlertTriangle, Trash2 } from 'lucide-react';
+import { Clock, Activity, ChevronDown, RefreshCw, AlertTriangle, Trash2, Droplets, Zap } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts';
 import {useWaterReadings} from '@/hooks/useWaterReadings';
 import { useMonitorData } from '@/contexts/MonitorDataContext';
+import { simulateWater, simulateLeakage } from '@/services/api';
 
 // Import province icons
 import NorthIcon from '../../../Smarten Assets/assets/North.svg';
@@ -344,6 +345,33 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
     setShowProvinceDropdown(false);
   };
 
+  const [isSimulatingWater, setIsSimulatingWater] = useState(false);
+  const [isSimulatingLeakage, setIsSimulatingLeakage] = useState(false);
+
+  const handleSimulateWater = async () => {
+    setIsSimulatingWater(true);
+    try {
+      await simulateWater();
+      // Optional: show a toast or message
+    } catch (err) {
+      console.error('Error simulating water:', err);
+    } finally {
+      setIsSimulatingWater(false);
+    }
+  };
+
+  const handleSimulateLeakage = async () => {
+    setIsSimulatingLeakage(true);
+    try {
+      await simulateLeakage();
+      // Optional: show a toast or message
+    } catch (err) {
+      console.error('Error simulating leakage:', err);
+    } finally {
+      setIsSimulatingLeakage(false);
+    }
+  };
+
   return (
     <MainLayout title={selectedProvince}>
       {/* Data Status Indicator */}
@@ -386,6 +414,28 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
             })}
           </div>
           
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSimulateWater}
+            disabled={isSimulatingWater}
+            className="flex items-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
+          >
+            <Droplets className={`w-4 h-4 ${isSimulatingWater ? 'animate-pulse' : ''}`} />
+            {isSimulatingWater ? 'Simulating...' : 'Simulate Water'}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSimulateLeakage}
+            disabled={isSimulatingLeakage}
+            className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+          >
+            <Zap className={`w-4 h-4 ${isSimulatingLeakage ? 'animate-pulse' : ''}`} />
+            {isSimulatingLeakage ? 'Simulating...' : 'Simulate Leakage'}
+          </Button>
+
           <Button
             variant="outline"
             size="sm"

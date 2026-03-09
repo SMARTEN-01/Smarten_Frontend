@@ -292,6 +292,8 @@ export const checkScheduledControlStatus = () => api.get("/control/manage-schedu
 export const getHourlyAverages = () => api.get("/monitoring/hourly-averages/");
 export const getLastHourAverage = () => api.get("/monitoring/last-hour-average/");
 export const getCriticalReadings = () => api.get("/monitoring/critical-readings/");
+export const simulateWater = () => api.post("/monitoring/simulate-water/");
+export const simulateLeakage = () => api.post("/monitoring/simulate-leakage/");
 
 // Commands
 export const sendCommand = (data) => api.post("/control/send-command/", data);
