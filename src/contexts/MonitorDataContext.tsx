@@ -114,10 +114,105 @@ export const MonitorDataProvider = ({ children }: { children: ReactNode }) => {
   const [monitorData, setMonitorData] = useState<MonitorData>(getDefaultData);
   const [isDataStale, setIsDataStale] = useState(false);
 
-  // Load data from storage on mount
+  // Load data from storage on mount and fetch initial data from API
   useEffect(() => {
     const loadedData = loadDataFromStorage();
     setMonitorData(loadedData);
+    
+    // Fetch initial data from API to supplement storage
+    const fetchInitialData = async () => {
+      try {
+        const { getHourlyAverages, getLastHourAverage, getCriticalReadings } = await import('../services/api');
+        
+        // 1. Fetch province-level averages
+        const hourlyRes = await getHourlyAverages();
+        if (hourlyRes.data?.data) {
+          const apiWaterData = [];
+          const pastHourMap = {};
+          
+          Object.entries(hourlyRes.data.data).forEach(([province, data]) => {
+            const typedData = data as any;
+            if (typedData) {
+              apiWaterData.push({
+                province,
+                flow_rate_lph: typedData.average_flow_rate,
+                status: typedData.status,
+                timestamp: typedData.timestamp
+              });
+              pastHourMap[province] = {
+                average: typedData.average_flow_rate,
+                status: typedData.status
+              };
+            }
+          });
+          
+          if (apiWaterData.length > 0) {
+            setMonitorData(prev => ({
+              ...prev,
+              waterData: [...prev.waterData, ...apiWaterData].slice(-MAX_WATER_DATA_POINTS),
+              pastHour: { ...prev.pastHour, ...pastHourMap },
+              lastUpdated: new Date().toISOString()
+            }));
+          }
+        }
+        
+        // 2. Fetch district-level averages for the history table
+        const lastHourRes = await getLastHourAverage();
+        if (lastHourRes.data?.data) {
+          const apiDistrictData = lastHourRes.data.data.map((item, index) => ({
+            id: Date.now() + index,
+            district: item.district,
+            flow_rate: item.average_flow_rate,
+            status: item.status,
+            timestamp: lastHourRes.data.hour,
+            province: item.province
+          }));
+          
+          if (apiDistrictData.length > 0) {
+            setMonitorData(prev => ({
+              ...prev,
+              districtData: [...prev.districtData, ...apiDistrictData].slice(-MAX_DISTRICT_DATA_POINTS),
+              lastUpdated: new Date().toISOString()
+            }));
+          }
+        }
+        
+        // 3. Fetch critical readings
+        const criticalRes = await getCriticalReadings();
+        if (criticalRes.data) {
+          const apiCriticalData = [];
+          if (criticalRes.data.overflow) {
+            apiCriticalData.push({
+              province: criticalRes.data.overflow.province,
+              district: 'All District',
+              status: 'overflow',
+              waterflow: criticalRes.data.overflow.average_flow_rate
+            });
+          }
+          if (criticalRes.data.underflow) {
+            apiCriticalData.push({
+              province: criticalRes.data.underflow.province,
+              district: 'All District',
+              status: 'underflow',
+              waterflow: criticalRes.data.underflow.average_flow_rate
+            });
+          }
+          
+          if (apiCriticalData.length > 0) {
+            setMonitorData(prev => ({
+              ...prev,
+              criticalReadings: apiCriticalData,
+              lastUpdated: new Date().toISOString()
+            }));
+          }
+        }
+        
+      } catch (error) {
+        console.error('Error fetching initial monitor data:', error);
+      }
+    };
+    
+    fetchInitialData();
   }, []);
 
   // Subscribe to global WebSocket service for all provinces
