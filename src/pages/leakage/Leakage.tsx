@@ -838,6 +838,7 @@ const Leakage = () => {
                 </button>
               ))}
             </div>
+            </div>
           </div>
 
           {/* Simulation Buttons */}

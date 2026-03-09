@@ -346,8 +346,6 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
   };
 
   const [isSimulatingWater, setIsSimulatingWater] = useState(false);
-  const [isSimulatingWater, setIsSimulatingWater] = useState(false);
-  const [isSimulatingLeakage, setIsSimulatingLeakage] = useState(false);
 
   const handleSimulateWater = async () => {
     setIsSimulatingWater(true);
