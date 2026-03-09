@@ -71,7 +71,7 @@ const Header = ({ title, onShowNotifications, unreadCount = 0 }: HeaderProps) =>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-2 ml-4 cursor-pointer hover:bg-accent rounded-md p-1 dark-mode-transition">
                 <div className="w-7 h-7 bg-[#3A8DDE] rounded-full flex items-center justify-center">
-                  <img src="/Smarten Assets/assets/WASAC 1.png" alt="WASAC" className="w-5 h-5" />
+                  <img src="/assets/WASAC 1.png" alt="WASAC" className="w-5 h-5" />
                 </div>
                 <span className="text-sm font-medium text-foreground">WASAC</span>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />

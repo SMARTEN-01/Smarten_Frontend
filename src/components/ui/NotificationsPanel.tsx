@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-import Frame1201Icon from '../../../Smarten Assets/assets/Frame 1201.svg';
-import LeakageButtonIcon from '../../../Smarten Assets/assets/Leakage button.svg';
-import PeopleIcon from '../../../Smarten Assets/assets/People.svg';
-import ToggleRightIcon from '../../../Smarten Assets/assets/toggle-right 1.svg';
-import DropletsIcon from '../../../Smarten Assets/assets/droplets.svg';
+// Define SVG icons as absolute paths (assets are in the public/assets directory)
+const Frame1201Icon = '/assets/Frame 1201.svg';
+const LeakageButtonIcon = '/assets/Leakage button.svg';
+const PeopleIcon = '/assets/People.svg';
+const ToggleRightIcon = '/assets/toggle-right 1.svg';
+const DropletsIcon = '/assets/droplets.svg';
 import LeakageDetailModal from './LeakageDetailModal';
 import { useNotificationContext } from '@/pages/NotificationContext';
 

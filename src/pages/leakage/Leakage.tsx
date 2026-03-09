@@ -8,14 +8,16 @@ import { useToast } from '@/hooks/use-toast';
 import { getAllLeaks, getInvestigatingLeaks, resolveLeakage, getRecentLeakageProvince, getLeakageById, simulateLeakage, stopSimulateLeakage } from '@/services/api.js';
 import LeakageResolutionModal from '@/components/ui/LeakageResolutionModal';
 // Import SVG icons
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
-import HouseSearchingCuate from '../../../Smarten Assets/assets/House searching-cuate 1.svg';
-import SuccessIcon from '../../../Smarten Assets/assets/Success.png';
-import AlertIcon from '../../../Smarten Assets/assets/Alert.svg';
+// Define SVG icons as absolute paths (assets are in the public/assets directory)
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
+const HouseSearchingCuate = '/assets/House searching-cuate 1.svg';
+const SuccessIcon = '/assets/Success.png';
+const AlertIcon = '/assets/Alert.svg';
+const CalendarGif = '/assets/Calendar.gif';
 
 const regions = [
   { id: 'north', name: 'Northern', icon: NorthIcon, color: '#FCD34D' },

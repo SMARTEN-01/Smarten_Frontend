@@ -10,11 +10,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useToast } from '@/hooks/use-toast';
 
 // Import SVG icons
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+// Define SVG icons as absolute paths (assets are in the public/assets directory)
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
+const CalendarGif = '/assets/Calendar.gif';
 
 interface FormData {
   location: string;
@@ -188,37 +190,55 @@ const Control = () => {
       const [type, value] = selectedLocation.split(':');
       const location = type === 'province' ? { province: value } : { district: value };
       const response = await sendCommand({ command, location });
-      console.log('API Response:', response.data);
       const data = response.data || {};
-      const { message = 'No message', status = 'failed', commands = [], error } = data;
+      console.log('API Response:', data);
+
+      const { message = 'No message', commands = [], error } = data;
 
       if (error) {
         throw new Error(error);
       }
 
-      const toastVariant = status === 'success' ? 'default' : status === 'partial_success' ? 'default' : 'destructive';
+      // Determine top-level status if missing
+      let status = data.status;
+      if (!status && commands.length > 0) {
+        const allFailed = commands.every((cmd: any) => cmd.status === 'failed');
+        const anySuccess = commands.some((cmd: any) => cmd.status === 'success');
+        status = anySuccess ? (allFailed ? 'failed' : 'success') : 'failed';
+        
+        // If we have mixed, let's call it partial_success
+        if (anySuccess && commands.some((cmd: any) => cmd.status === 'failed')) {
+          status = 'partial_success';
+        }
+      }
+
+      const toastVariant = (status === 'success' || status === 'partial_success') ? 'default' : 'destructive';
       const failedCommands = commands.filter((cmd: any) => cmd.status === 'failed');
       const successCommands = commands.filter((cmd: any) => cmd.status === 'success');
 
       let toastDescription = '';
       if (failedCommands.length > 0) {
         toastDescription += 'Failed Devices:\n';
-        toastDescription += failedCommands.map((cmd: any) => `${cmd.status_message}`).join('\n');
+        toastDescription += failedCommands.map((cmd: any) => `${cmd.status_message || (cmd.device_id + ': Failed')}`).join('\n');
       }
       if (successCommands.length > 0) {
         if (toastDescription) toastDescription += '\n';
         toastDescription += 'Successful Devices:\n';
-        toastDescription += successCommands.map((cmd: any) => cmd.status_message).join('\n');
+        toastDescription += successCommands.map((cmd: any) => cmd.status_message || (cmd.device_id + ': Connected')).join('\n');
       }
-      if (commands.length === 0) {
+      
+      if (commands.length === 0 && !error) {
+        toastDescription = message || 'Command sent successfully';
+        if (!status) status = 'success';
+      } else if (commands.length === 0) {
         toastDescription = 'No device response';
       }
 
-      setSuccess(message);
+      setSuccess(message || 'Operation successful');
       toast({
         title: status === 'success' ? 'Success' : status === 'partial_success' ? 'Partial Success' : 'Failed',
         description: toastDescription,
-        variant: toastVariant,
+        variant: (status === 'success' || status === 'partial_success') ? 'default' : 'destructive',
       });
     } catch (error: any) {
       console.error('Error in handleCommand:', error.response?.data);
@@ -552,7 +572,7 @@ const Control = () => {
                             <td colSpan={4} className="py-8">
                               <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
                                 <img 
-                                  src="/assets/Calendar.gif" 
+                                  src={CalendarGif} 
                                   alt="No history data" 
                                   className="w-[90%] h-[90%] max-w-80 max-h-80 mb-4 object-contain"
                                 />
@@ -735,7 +755,7 @@ const Control = () => {
             ) : (
                   <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
                     <img 
-                      src="/assets/Calendar.gif" 
+                      src={CalendarGif} 
                       alt="No scheduled controls" 
                       className="w-[90%] h-[90%] max-w-80 max-h-80 mb-4 object-contain"
                     />

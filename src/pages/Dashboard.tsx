@@ -248,12 +248,12 @@ const Dashboard = () => {
 
   const getProvinceIcon = (province) => {
     switch (province) {
-      case 'Northern': return '/Smarten Assets/assets/North.svg';
-      case 'Southern': return '/Smarten Assets/assets/South.svg';
-      case 'Eastern': return '/Smarten Assets/assets/East.svg';
-      case 'Western': return '/Smarten Assets/assets/West.svg';
-      case 'Kigali': return '/Smarten Assets/assets/Kigali.svg';
-      default: return '/Smarten Assets/assets/South.svg';
+      case 'Northern': return '/assets/North.svg';
+      case 'Southern': return '/assets/South.svg';
+      case 'Eastern': return '/assets/East.svg';
+      case 'Western': return '/assets/West.svg';
+      case 'Kigali': return '/assets/Kigali.svg';
+      default: return '/assets/South.svg';
     }
   };
 

@@ -9,14 +9,13 @@ import { useMonitorData } from '@/contexts/MonitorDataContext';
 import { simulateWater, stopSimulateWater } from '@/services/api';
 
 // Import province icons
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
-
-// Import Group icon
-import GroupIcon from '../../../Smarten Assets/assets/Group.svg';
+// Define province icons as absolute paths (assets are in the public/assets directory)
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
+const GroupIcon = '/assets/Group.svg';
 
 // Custom tooltip component for the chart
 const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {

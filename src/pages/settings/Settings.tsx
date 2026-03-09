@@ -26,13 +26,14 @@ import {
   Moon,
   Sun
 } from 'lucide-react';
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
-import WasacLogo from '../../../Smarten Assets/assets/WASAC 1.png';
-import SuccessImage from '../../../Smarten Assets/assets/Success.png';
+// Define SVG icons as absolute paths (assets are in the public/assets directory)
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
+const WasacLogo = '/assets/WASAC 1.png';
+const SuccessImage = '/assets/Success.png';
 import { getUserDetails } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 

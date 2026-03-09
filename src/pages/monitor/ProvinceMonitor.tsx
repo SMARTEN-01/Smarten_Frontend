@@ -11,11 +11,12 @@ import { useWaterReadings } from '@/hooks/useWaterReadings';
 import { useMonitorData } from '@/contexts/MonitorDataContext';
 
 // Import province icons
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+// Define province icons as absolute paths (assets are in the public/assets directory)
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 // Custom tooltip component for the chart
 const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
