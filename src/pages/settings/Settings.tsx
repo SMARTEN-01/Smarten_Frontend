@@ -32,7 +32,7 @@ const SouthIcon = '/assets/South.svg';
 const EastIcon = '/assets/East.svg';
 const WestIcon = '/assets/West.svg';
 const KigaliIcon = '/assets/Kigali.svg';
-const WasacLogo = '/assets/WASAC 1.png';
+const WasacLogo = '/assets/WASAC_1.png';
 const SuccessImage = '/assets/Success.png';
 import { getUserDetails } from '@/services/api';
 import { useNavigate } from 'react-router-dom';

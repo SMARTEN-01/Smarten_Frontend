@@ -190,11 +190,11 @@ const Dashboard = () => {
         console.log("Failed to fetch user count data", err.message);
         // Keep default values on error
         setUserCountData([
-          { region: 'North', value: 0, unit: 'users', bgColor: 'bg-yellow-50', textColor: 'text-yellow-500', iconText: 'N', iconSrc: '/Smarten Assets/assets/North.svg' },
-          { region: 'South', value: 0, unit: 'users', bgColor: 'bg-blue-50', textColor: 'text-blue-500', iconText: 'S', iconSrc: '/Smarten Assets/assets/South.svg' },
-          { region: 'East', value: 0, unit: 'users', bgColor: 'bg-orange-50', textColor: 'text-orange-500', iconText: 'E', iconSrc: '/Smarten Assets/assets/East.svg' },
-          { region: 'West', value: 0, unit: 'users', bgColor: 'bg-green-50', textColor: 'text-green-500', iconText: 'W', iconSrc: '/Smarten Assets/assets/West.svg' },
-          { region: 'Kigali', value: 0, unit: 'users', bgColor: 'bg-purple-50', textColor: 'text-purple-500', iconText: 'K', iconSrc: '/Smarten Assets/assets/Kigali.svg' },
+          { region: 'North', value: 0, unit: 'users', bgColor: 'bg-yellow-50', textColor: 'text-yellow-500', iconText: 'N', iconSrc: '/assets/North.svg' },
+          { region: 'South', value: 0, unit: 'users', bgColor: 'bg-blue-50', textColor: 'text-blue-500', iconText: 'S', iconSrc: '/assets/South.svg' },
+          { region: 'East', value: 0, unit: 'users', bgColor: 'bg-orange-50', textColor: 'text-orange-500', iconText: 'E', iconSrc: '/assets/East.svg' },
+          { region: 'West', value: 0, unit: 'users', bgColor: 'bg-green-50', textColor: 'text-green-500', iconText: 'W', iconSrc: '/assets/West.svg' },
+          { region: 'Kigali', value: 0, unit: 'users', bgColor: 'bg-purple-50', textColor: 'text-purple-500', iconText: 'K', iconSrc: '/assets/Kigali.svg' },
         ]);
       } finally {
         setUserCountLoading(false);
@@ -300,7 +300,7 @@ const Dashboard = () => {
       textColor: 'text-foreground',
       iconBg: 'bg-yellow-500',
       iconText: 'N',
-      iconSrc: '/Smarten Assets/assets/North.svg'
+      iconSrc: '/assets/North.svg'
     },
     { 
       id: 'south', 
@@ -311,7 +311,7 @@ const Dashboard = () => {
       textColor: 'text-foreground',
       iconBg: 'bg-blue-500',
       iconText: 'S',
-      iconSrc: '/Smarten Assets/assets/South.svg'
+      iconSrc: '/assets/South.svg'
     },
     { 
       id: 'east', 
@@ -322,7 +322,7 @@ const Dashboard = () => {
       textColor: 'text-foreground',
       iconBg: 'bg-orange-500',
       iconText: 'E',
-      iconSrc: '/Smarten Assets/assets/East.svg'
+      iconSrc: '/assets/East.svg'
     },
     { 
       id: 'west', 
@@ -333,7 +333,7 @@ const Dashboard = () => {
       textColor: 'text-foreground', 
       iconBg: 'bg-green-500',
       iconText: 'W',
-      iconSrc: '/Smarten Assets/assets/West.svg'
+      iconSrc: '/assets/West.svg'
     },
     { 
       id: 'kigali', 
@@ -344,26 +344,26 @@ const Dashboard = () => {
       textColor: 'text-foreground',
       iconBg: 'bg-purple-500',
       iconText: 'K',
-      iconSrc: '/Smarten Assets/assets/Kigali.svg'
+      iconSrc: '/assets/Kigali.svg'
     },
   ];
 
   // Use real leakage stats or fallback to default
   const displayStats = leakageStats.length > 0 ? leakageStats : [
-    { region: 'Northern', count: 0, color: 'rgba(254, 240, 138, 0.25)', textColor: 'rgba(250, 204, 21, 0.6)', iconSrc: '/Smarten Assets/assets/North.svg' },
-    { region: 'Southern', count: 0, color: 'rgba(191, 219, 254, 0.25)', textColor: 'rgba(96, 165, 250, 0.6)', iconSrc: '/Smarten Assets/assets/South.svg' },
-    { region: 'Eastern', count: 0, color: 'rgba(253, 186, 116, 0.25)', textColor: 'rgba(251, 146, 60, 0.6)', iconSrc: '/Smarten Assets/assets/East.svg' },
-    { region: 'Western', count: 0, color: 'rgba(167, 243, 208, 0.25)', textColor: 'rgba(52, 211, 153, 0.6)', iconSrc: '/Smarten Assets/assets/West.svg' },
-    { region: 'Kigali', count: 0, color: 'rgba(233, 213, 255, 0.25)', textColor: 'rgba(192, 132, 252, 0.6)', iconSrc: '/Smarten Assets/assets/Kigali.svg' },
+    { region: 'Northern', count: 0, color: 'rgba(254, 240, 138, 0.25)', textColor: 'rgba(250, 204, 21, 0.6)', iconSrc: '/assets/North.svg' },
+    { region: 'Southern', count: 0, color: 'rgba(191, 219, 254, 0.25)', textColor: 'rgba(96, 165, 250, 0.6)', iconSrc: '/assets/South.svg' },
+    { region: 'Eastern', count: 0, color: 'rgba(253, 186, 116, 0.25)', textColor: 'rgba(251, 146, 60, 0.6)', iconSrc: '/assets/East.svg' },
+    { region: 'Western', count: 0, color: 'rgba(167, 243, 208, 0.25)', textColor: 'rgba(52, 211, 153, 0.6)', iconSrc: '/assets/West.svg' },
+    { region: 'Kigali', count: 0, color: 'rgba(233, 213, 255, 0.25)', textColor: 'rgba(192, 132, 252, 0.6)', iconSrc: '/assets/Kigali.svg' },
   ];
 
   // Use real user count data or fallback to default
   const customerData = userCountData.length > 0 ? userCountData : [
-    { region: 'North', value: 0, unit: 'users', bgColor: 'bg-yellow-50 dark:bg-yellow-950', textColor: 'text-yellow-500 dark:text-yellow-400', iconText: 'N', iconSrc: '/Smarten Assets/assets/North.svg' },
-    { region: 'South', value: 0, unit: 'users', bgColor: 'bg-blue-50 dark:bg-blue-950', textColor: 'text-blue-500 dark:text-blue-400', iconText: 'S', iconSrc: '/Smarten Assets/assets/South.svg' },
-    { region: 'East', value: 0, unit: 'users', bgColor: 'bg-orange-50 dark:bg-orange-950', textColor: 'text-orange-500 dark:text-orange-400', iconText: 'E', iconSrc: '/Smarten Assets/assets/East.svg' },
-    { region: 'West', value: 0, unit: 'users', bgColor: 'bg-green-50 dark:bg-green-950', textColor: 'text-green-500 dark:text-green-400', iconText: 'W', iconSrc: '/Smarten Assets/assets/West.svg' },
-    { region: 'Kigali', value: 0, unit: 'users', bgColor: 'bg-purple-50 dark:bg-purple-950', textColor: 'text-purple-500 dark:text-purple-400', iconText: 'K', iconSrc: '/Smarten Assets/assets/Kigali.svg' },
+    { region: 'North', value: 0, unit: 'users', bgColor: 'bg-yellow-50 dark:bg-yellow-950', textColor: 'text-yellow-500 dark:text-yellow-400', iconText: 'N', iconSrc: '/assets/North.svg' },
+    { region: 'South', value: 0, unit: 'users', bgColor: 'bg-blue-50 dark:bg-blue-950', textColor: 'text-blue-500 dark:text-blue-400', iconText: 'S', iconSrc: '/assets/South.svg' },
+    { region: 'East', value: 0, unit: 'users', bgColor: 'bg-orange-50 dark:bg-orange-950', textColor: 'text-orange-500 dark:text-orange-400', iconText: 'E', iconSrc: '/assets/East.svg' },
+    { region: 'West', value: 0, unit: 'users', bgColor: 'bg-green-50 dark:bg-green-950', textColor: 'text-green-500 dark:text-green-400', iconText: 'W', iconSrc: '/assets/West.svg' },
+    { region: 'Kigali', value: 0, unit: 'users', bgColor: 'bg-purple-50 dark:bg-purple-950', textColor: 'text-purple-500 dark:text-purple-400', iconText: 'K', iconSrc: '/assets/Kigali.svg' },
   ];
 
   // Use real device data or fallback to default
