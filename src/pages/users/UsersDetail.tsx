@@ -4,13 +4,13 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MapPin, ChevronDown } from 'lucide-react';
 import UserDetailModal from '@/components/ui/UserDetailModal';
-import UsersIcon from '../../../Smarten Assets/assets/Users.svg';
-import WaterIcon from '../../../Smarten Assets/assets/water.svg';
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+const UsersIcon = '/assets/Users.svg';
+const WaterIcon = '/assets/water.svg';
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 const UsersDetail = () => {
   const { province } = useParams();

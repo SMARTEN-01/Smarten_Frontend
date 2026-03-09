@@ -1,10 +1,10 @@
 import { X, ChevronRight } from 'lucide-react';
-import GianaLockettImage from '../../../Smarten Assets/assets/Giana Lockett 1.png';
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+const GianaLockettImage = '/assets/Giana_Lockett_1.png';
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 interface UserDetailModalProps {
   isOpen: boolean;

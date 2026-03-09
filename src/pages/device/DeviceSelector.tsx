@@ -6,11 +6,11 @@ import { ChevronDown, Plus } from 'lucide-react';
 import { TotalEspPerProvince, TotalSensorPerProvince, TotalSmartValvePerProvince, TotalEspPerDistrict, TotalSensorPerDistrict, TotalSmartValvePerDistrict } from '@/services/api.js';
 
 // Import SVG icons
-import NorthernIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthernIcon from '../../../Smarten Assets/assets/South.svg';
-import EasternIcon from '../../../Smarten Assets/assets/East.svg';
-import WesternIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+const NorthernIcon = '/assets/North.svg';
+const SouthernIcon = '/assets/South.svg';
+const EasternIcon = '/assets/East.svg';
+const WesternIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 interface ProvinceRecord {
   Eastern: number;

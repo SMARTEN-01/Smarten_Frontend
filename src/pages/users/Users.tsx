@@ -8,11 +8,11 @@ import { Input } from '@/components/ui/input';
 import LineChart from '@/components/ui/LineChart';
 import RegionIcon from '@/components/ui/RegionIcon';
 import { Search, Users as UsersIcon, TrendingUp, UserPlus } from 'lucide-react';
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 const Users = () => {
   const [selectedRegion, setSelectedRegion] = useState('north');

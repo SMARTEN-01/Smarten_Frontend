@@ -53,7 +53,7 @@ const VerifyEmail = () => {
           {/* Illustration */}
           <img 
             style={{width: 300, height: 250}} 
-            src="/Smarten Assets/assets/verify-email.jpg" 
+            src="/assets/verify-email.jpg" 
             alt="Email verification illustration"
           />
           

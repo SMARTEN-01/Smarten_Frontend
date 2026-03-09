@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { X, BookOpen, MapPin, Play, AlertTriangle } from 'lucide-react';
 import { getLeakageById } from '@/services/api';
 import { useNotificationContext } from '@/pages/NotificationContext';
-import NorthIcon from '../../../Smarten Assets/assets/North.svg';
-import SouthIcon from '../../../Smarten Assets/assets/South.svg';
-import EastIcon from '../../../Smarten Assets/assets/East.svg';
-import WestIcon from '../../../Smarten Assets/assets/West.svg';
-import KigaliIcon from '../../../Smarten Assets/assets/Kigali.svg';
+const NorthIcon = '/assets/North.svg';
+const SouthIcon = '/assets/South.svg';
+const EastIcon = '/assets/East.svg';
+const WestIcon = '/assets/West.svg';
+const KigaliIcon = '/assets/Kigali.svg';
 
 interface LeakageDetailModalProps {
   notification: {

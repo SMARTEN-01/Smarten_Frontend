@@ -1148,7 +1148,7 @@ const Leakage = () => {
                       <div className="bg-[#3B82F6] rounded-xl flex flex-col items-center justify-center mx-auto my-6 animate-fade-in" style={{maxWidth: 340, minHeight: 240, width: '100%', display: 'flex'}}>
                         <span className="text-white text-lg font-semibold mb-2 mt-8 text-center">No Leakage Detected<br/>in {getProvinceName(selectedRegion)}</span>
                         <img 
-                          src="/Smarten Assets/assets/No data-cuate.svg" 
+                          src="/assets/No_data-cuate.svg" 
                           alt="No leakage detected" 
                           className="w-48 h-36 object-contain mb-8"
                         />

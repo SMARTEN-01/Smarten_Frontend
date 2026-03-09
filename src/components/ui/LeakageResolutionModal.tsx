@@ -3,7 +3,7 @@ import { MapPin, AlertTriangle, CheckCircle, Activity, Edit3 } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getLeakageById, resolveLeakage } from '@/services/api';
-import HouseSearchingCuate from '../../../Smarten Assets/assets/House searching-cuate 1.svg';
+const HouseSearchingCuate = '/assets/House_searching-cuate_1.svg';
 
 interface LeakageResolutionModalProps {
   isOpen: boolean;
