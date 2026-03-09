@@ -123,13 +123,6 @@ const Leakage = () => {
 
         // Refetch everything to update the lists
         refetch();
-        
-        // Show a toast if it's a new leak
-        toast({
-          title: "New Leakage Detected",
-          description: `Location: ${leakageData.location}`,
-          variant: leakageData.severity === 'HIGH' ? "destructive" : "default",
-        });
       }
     }
   };

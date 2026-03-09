@@ -138,16 +138,6 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
             return prev;
           }
 
-          // Show toast notification only for leak alerts
-          toast({
-            title: newNotification.title,
-            description: `${newNotification.message}\n${newNotification.location} • ${new Date(timestamp).toLocaleString()}`,
-            variant: alert.severity === 'HIGH' ? 'destructive' : 'default',
-            duration: 8000, // Longer duration to allow clicking
-            className: `border-l-4 ${alert.severity === 'HIGH' ? 'border-red-500' : 'border-yellow-500'} cursor-pointer hover:opacity-90 transition-opacity`,
-            onClick: () => openToastModal(newNotification), // Make entire toast clickable
-          });
-
           return [...prev, newNotification];
         });
 
