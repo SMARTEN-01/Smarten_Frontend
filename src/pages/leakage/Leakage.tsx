@@ -2,10 +2,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
-import { ChevronDown, AlertCircle, CheckCircle, Activity, RefreshCw } from 'lucide-react';
+import { ChevronDown, AlertCircle, CheckCircle, Activity, RefreshCw, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { getAllLeaks, getInvestigatingLeaks, resolveLeakage, getRecentLeakageProvince, getLeakageById } from '@/services/api.js';
+import { getAllLeaks, getInvestigatingLeaks, resolveLeakage, getRecentLeakageProvince, getLeakageById, simulateLeakage, stopSimulateLeakage } from '@/services/api.js';
 import LeakageResolutionModal from '@/components/ui/LeakageResolutionModal';
 // Import SVG icons
 import NorthIcon from '../../../Smarten Assets/assets/North.svg';
@@ -37,6 +37,29 @@ const Leakage = () => {
   const [status, setStatus] = useState('Investigating');
   const [editResolved, setEditResolved] = useState(false);
   const [showResolvedForm, setShowResolvedForm] = useState(false);
+
+  // Simulation state
+  const [isSimulatingLeakage, setIsSimulatingLeakage] = useState(false);
+
+  const handleSimulateLeakage = async () => {
+    setIsSimulatingLeakage(true);
+    try {
+      await simulateLeakage();
+    } catch (err) {
+      console.error('Error simulating leakage:', err);
+      setIsSimulatingLeakage(false);
+    }
+  };
+
+  const handleStopSimulateLeakage = async () => {
+    try {
+      await stopSimulateLeakage();
+    } catch (err) {
+      console.error('Error stopping leakage simulation:', err);
+    } finally {
+      setIsSimulatingLeakage(false);
+    }
+  };
   // Get today's date in YYYY-MM-DD format for the date input
   const getTodayDate = () => {
     const today = new Date();
@@ -778,14 +801,15 @@ const Leakage = () => {
   return (
     <MainLayout>
       <div className="w-full min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-32">
-        {/* Province Dropdown */}
-        <div className="flex items-center gap-2 mt-6 ml-6">
-          <div className="relative">
-            <button
-              className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-200 shadow-sm text-base font-semibold focus:outline-none transition hover:shadow-md active:scale-95"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              style={{ minWidth: 120 }}
-            >
+        {/* Province Dropdown + Simulation Controls */}
+        <div className="flex items-center justify-between mt-6 ml-6 mr-6">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-200 shadow-sm text-base font-semibold focus:outline-none transition hover:shadow-md active:scale-95"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{ minWidth: 120 }}
+              >
               <span className="w-7 h-7 flex items-center justify-center rounded-full" style={{ background: `${region.color}33` }}>
                 <img src={region.icon} alt={region.name} className="w-4 h-4" />
               </span>
@@ -814,6 +838,30 @@ const Leakage = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Simulation Buttons */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSimulateLeakage}
+              disabled={isSimulatingLeakage}
+              className="flex items-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+            >
+              <Zap className={`w-4 h-4 ${isSimulatingLeakage ? 'animate-pulse' : ''}`} />
+              {isSimulatingLeakage ? 'Simulating...' : 'Simulate Leakage'}
+            </Button>
+            {isSimulatingLeakage && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleStopSimulateLeakage}
+                className="text-red-500 border-red-200 hover:bg-red-50"
+              >
+                Stop
+              </Button>
+            )}
           </div>
         </div>
 
