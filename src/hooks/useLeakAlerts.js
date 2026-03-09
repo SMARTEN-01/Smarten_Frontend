@@ -8,7 +8,7 @@ export const useLeakAlerts = () => {
   const reconnectInterval = 5000; // 5 seconds
 
   const connectWebSocket = async () => {
-    const WS_BASE = import.meta.env.VITE_WS_BASE ;
+    const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://127.0.0.1:8000';
     
     // Wait for token with retry mechanism and API fallback
     const waitForToken = async (maxRetries = 3, delay = 500) => {

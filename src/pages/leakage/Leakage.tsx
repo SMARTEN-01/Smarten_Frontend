@@ -97,16 +97,17 @@ const Leakage = () => {
 
   // WebSocket notification functions
   const handleNotificationReceived = async (notificationData) => {
-    if (notificationData.leakage_id) {
+    if (notificationData.leak_id || notificationData.leakage_id) {
+      const id = notificationData.leak_id || notificationData.leakage_id;
       // Fetch the actual leakage data from API
-      const leakageData = await fetchLeakageData(notificationData.leakage_id);
+      const leakageData = await fetchLeakageData(id);
       
       if (leakageData) {
         // Store notification with actual data
         setNotificationCache(prev => {
           const newCache = new Map(prev);
-          newCache.set(notificationData.leakage_id, {
-            id: notificationData.leakage_id,
+          newCache.set(id, {
+            id: id,
             timestamp: leakageData.occurred_at,
             message: notificationData.message || 'New leakage detected',
             location: leakageData.location,
@@ -116,6 +117,16 @@ const Leakage = () => {
             ...leakageData
           });
           return newCache;
+        });
+
+        // Refetch everything to update the lists
+        refetch();
+        
+        // Show a toast if it's a new leak
+        toast({
+          title: "New Leakage Detected",
+          description: `Location: ${leakageData.location}`,
+          variant: leakageData.severity === 'HIGH' ? "destructive" : "default",
         });
       }
     }
@@ -392,27 +403,52 @@ const Leakage = () => {
   // WebSocket connection for notifications
   useEffect(() => {
     const WS_BASE = import.meta.env.VITE_WS_BASE || 'ws://127.0.0.1:8000';
-    const ws = new WebSocket(`${WS_BASE}/ws/leak-alerts/`);
-    ws.onopen = () => {
-      console.log('WebSocket connected');
+    
+    const connectWS = async () => {
+      // Try to get token from cookies
+      const accessToken = document.cookie.match(/accessToken=([^;]*)/);
+      const token = accessToken ? accessToken[1] : null;
+      
+      const wsUrl = token ? `${WS_BASE}/ws/leak-alerts/?token=${encodeURIComponent(token)}` : `${WS_BASE}/ws/leak-alerts/`;
+      const ws = new WebSocket(wsUrl);
+      
+      ws.onopen = () => {
+        console.log('Leakage page WebSocket connected');
+      };
+      
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log('WebSocket message received:', data);
+          
+          // Check if it's a potential leak
+          if (data.status === 'potential_leak') {
+            handleNotificationReceived(data);
+          }
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      };
+      
+      ws.onclose = () => {
+        console.log('Leakage page WebSocket disconnected, retrying in 5s...');
+        setTimeout(connectWS, 5000);
+      };
+      
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+      
+      return ws;
     };
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log('WebSocket message received:', data);
-        handleNotificationReceived(data);
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
-      }
-    };
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
+
+    let socket;
+    connectWS().then(ws => {
+      socket = ws;
+    });
+
     return () => {
-      ws.close();
+      if (socket) socket.close();
     };
   }, []);
 
