@@ -31,15 +31,15 @@ const LeakageDetailModal = ({ notification, onClose }: LeakageDetailModalProps) 
   const [error, setError] = useState(null);
 
   // Debug: Log the notification data
-  console.log('=== LEAKAGE DETAIL MODAL DEBUG ===');
-  console.log('LeakageDetailModal received notification:', notification);
-  console.log('Notification leakage_id:', notification?.leakage_id);
-  console.log('Notification water_lost:', notification?.water_lost);
-  console.log('Notification location:', notification?.location);
-  console.log('Notification timestamp:', notification?.timestamp);
-  console.log('Notification time/timestamp:', notification?.timestamp);
-  console.log('Full notification object keys:', notification ? Object.keys(notification) : 'No notification');
-  console.log('=== END DEBUG ===');
+  /* console.log('=== LEAKAGE DETAIL MODAL DEBUG ==='); */
+  /* console.log('LeakageDetailModal received notification:', notification); */
+  /* console.log('Notification leakage_id:', notification?.leakage_id); */
+  /* console.log('Notification water_lost:', notification?.water_lost); */
+  /* console.log('Notification location:', notification?.location); */
+  /* console.log('Notification timestamp:', notification?.timestamp); */
+  /* console.log('Notification time/timestamp:', notification?.timestamp); */
+  /* console.log('Full notification object keys:', notification ? Object.keys(notification) : 'No notification'); */
+  /* console.log('=== END DEBUG ==='); */
 
   const handleSwitchToggle = () => {
     setSwitchState(!switchState);
@@ -62,14 +62,14 @@ const LeakageDetailModal = ({ notification, onClose }: LeakageDetailModalProps) 
       setLoading(false);
 
       if (!notification.leakage_id) {
-        console.log('No leakage_id provided, showing notification data only');
+        /* console.log('No leakage_id provided, showing notification data only'); */
         return;
       }
 
       // Step 1: Check if data exists in Map cache
       const cachedData = getLeakageData(notification.leakage_id);
       if (cachedData) {
-        console.log('Using cached leakage data:', cachedData);
+        /* console.log('Using cached leakage data:', cachedData); */
         setLocalLeakageData(cachedData);
         setSelectedStatus(cachedData.status === 'RESOLVED' ? 'resolved' : 'investigating');
         return;
@@ -79,10 +79,10 @@ const LeakageDetailModal = ({ notification, onClose }: LeakageDetailModalProps) 
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching leakage data for ID:', notification.leakage_id);
+        /* console.log('Fetching leakage data for ID:', notification.leakage_id); */
         
         const response = await getLeakageById(notification.leakage_id);
-        console.log('API Response:', response);
+        /* console.log('API Response:', response); */
         
         if (response && response.leakage) {
           const leakageData = response.leakage;
@@ -93,12 +93,12 @@ const LeakageDetailModal = ({ notification, onClose }: LeakageDetailModalProps) 
           
           // Update status based on fetched data
           setSelectedStatus(leakageData.status === 'RESOLVED' ? 'resolved' : 'investigating');
-          console.log('Leakage data loaded and cached successfully:', leakageData);
+          /* console.log('Leakage data loaded and cached successfully:', leakageData); */
         } else {
           setError('No leakage data found');
         }
       } catch (err) {
-        console.error('Error fetching leakage data:', err);
+        /* console.error('Error fetching leakage data:', err); */
         setError('Failed to fetch leakage details');
       } finally {
         setLoading(false);

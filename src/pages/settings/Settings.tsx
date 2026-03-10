@@ -347,7 +347,7 @@ useEffect(() => {
       const filename = `WASAC_Readings_Report_${provinceName}_${dateRange}_${generatedAt.toISOString().slice(0, 10)}.pdf`;
       pdf.save(filename);
     } catch (error) {
-      console.error('PDF export failed', error);
+      /* console.error('PDF export failed', error); */
     }
   };
 
@@ -445,7 +445,7 @@ useEffect(() => {
       const filename = `WASAC_Leakage_Report_${provinceName}_${dateRange}_${generatedAt.toISOString().slice(0, 10)}.pdf`;
       pdf.save(filename);
     } catch (error) {
-      console.error('Leakage PDF export failed', error);
+      /* console.error('Leakage PDF export failed', error); */
     }
   };
 
@@ -540,7 +540,7 @@ useEffect(() => {
       const filename = `WASAC_Control_Report_${provinceName}_${dateRange}_${generatedAt.toISOString().slice(0, 10)}.pdf`;
       pdf.save(filename);
     } catch (e) {
-      console.error('Control PDF export failed', e);
+      /* console.error('Control PDF export failed', e); */
     }
   };
 
@@ -596,7 +596,7 @@ useEffect(() => {
 
       pdf.save(`WASAC_Control_Detail_${provinceName}_${generatedAt.toISOString().slice(0,10)}.pdf`);
     } catch (e) {
-      console.error('Control detail PDF export failed', e);
+      /* console.error('Control detail PDF export failed', e); */
     }
   };
 

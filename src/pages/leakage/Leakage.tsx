@@ -48,7 +48,7 @@ const Leakage = () => {
     try {
       await simulateLeakage();
     } catch (err) {
-      console.error('Error simulating leakage:', err);
+      /* console.error('Error simulating leakage:', err); */
       setIsSimulatingLeakage(false);
     }
   };
@@ -57,7 +57,7 @@ const Leakage = () => {
     try {
       await stopSimulateLeakage();
     } catch (err) {
-      console.error('Error stopping leakage simulation:', err);
+      /* console.error('Error stopping leakage simulation:', err); */
     } finally {
       setIsSimulatingLeakage(false);
     }
@@ -227,7 +227,7 @@ const Leakage = () => {
         return leakage;
       }
     } catch (error) {
-      console.error('Error fetching leakage data:', error);
+      /* console.error('Error fetching leakage data:', error); */
       toast({
         title: "Error",
         description: "Failed to fetch leakage data",
@@ -242,7 +242,7 @@ const Leakage = () => {
   const loadRecentLeakageData = async () => {
     try {
       const response = await getRecentLeakageProvince(getProvinceName(selectedRegion));
-      console.log("Received Recent Leakage Province Data ", response.data);
+      /* console.log("Received Recent Leakage Province Data ", response.data); */
       
       if (response.data && response.data.leak) {
         const leak = response.data.leak;
@@ -264,7 +264,7 @@ const Leakage = () => {
         setIsLeakResolved(false);
       }
     } catch (error) {
-      console.error('Error loading recent leakage data:', error);
+      /* console.error('Error loading recent leakage data:', error); */
       // Reset to default state on error
       setMainLeakageData({
         date: '',
@@ -325,7 +325,7 @@ const Leakage = () => {
       setInvestigatingLoading(true);
       setInvestigatingError('');
       const res = await getInvestigatingLeaks(getProvinceName(selectedRegion));
-      console.log("Received Investigating Leaks Data ", res.data);
+      /* console.log("Received Investigating Leaks Data ", res.data); */
       
       if (res.data.leaks) {
         // Process the data to match frontend format
@@ -346,7 +346,7 @@ const Leakage = () => {
       }
     } catch (err) {
       setInvestigatingError(err.message || 'Failed to fetch investigating leaks data');
-      console.log("Failed to fetch investigating leaks data", err.message);
+      /* console.log("Failed to fetch investigating leaks data", err.message); */
       // Set mock data as fallback
       setInvestigatingLeaks(getMockInvestigatingData(selectedRegion));
       setTotalInvestigating(getMockInvestigatingData(selectedRegion).length);
@@ -362,7 +362,7 @@ const Leakage = () => {
         setDataLoading(true);
         setError('');
         const res = await getAllLeaks(getProvinceName(selectedRegion));
-        console.log("Received Leakage Data ", res.data);
+        /* console.log("Received Leakage Data ", res.data); */
         
         // Process the data to match frontend format
         const processedData = res.data.leaks.map(leak => ({
@@ -383,7 +383,7 @@ const Leakage = () => {
         // Don't update main card here - let the recent leakage fetch handle it
       } catch (err) {
         setError(err.message || 'Failed to fetch leakage data');
-        console.log("Failed to fetch leakage data", err.message);
+        /* console.log("Failed to fetch leakage data", err.message); */
         // Set mock data as fallback
         setLeakageData(getMockLeakageData(selectedRegion));
         setTotalLeaks(getMockLeakageData(selectedRegion).length);
@@ -408,30 +408,30 @@ const Leakage = () => {
       const ws = new WebSocket(wsUrl);
       
       ws.onopen = () => {
-        console.log('Leakage page WebSocket connected');
+        /* console.log('Leakage page WebSocket connected'); */
       };
       
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log('WebSocket message received:', data);
+          /* console.log('WebSocket message received:', data); */
           
           // Check if it's a potential leak
           if (data.status === 'potential_leak') {
             handleNotificationReceived(data);
           }
         } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
+          /* console.error('Error parsing WebSocket message:', error); */
         }
       };
       
       ws.onclose = () => {
-        console.log('Leakage page WebSocket disconnected, retrying in 5s...');
+        /* console.log('Leakage page WebSocket disconnected, retrying in 5s...'); */
         setTimeout(connectWS, 5000);
       };
       
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        /* console.error('WebSocket error:', error); */
       };
       
       return ws;
@@ -549,7 +549,7 @@ const Leakage = () => {
     // Fetch recent leakage for main card
     try {
       const res = await getRecentLeakageProvince(getProvinceName(selectedRegion));
-      console.log("Refetch - Received Recent Leakage Province Data ", res.data);
+      /* console.log("Refetch - Received Recent Leakage Province Data ", res.data); */
       
       if (res.data.leak) {
         const leak = res.data.leak;
@@ -590,7 +590,7 @@ const Leakage = () => {
         setIsLeakResolved(false);
       }
     } catch (err) {
-      console.log("Failed to refetch recent leakage province data", err.message);
+      /* console.log("Failed to refetch recent leakage province data", err.message); */
     }
 
     // Fetch history data
@@ -599,7 +599,7 @@ const Leakage = () => {
         setDataLoading(true);
         setError('');
         const res = await getAllLeaks(getProvinceName(selectedRegion));
-        console.log("Received Leakage Data ", res.data);
+        /* console.log("Received Leakage Data ", res.data); */
         
         const processedData = res.data.leaks.map(leak => ({
           id: leak.leak_id,
@@ -617,7 +617,7 @@ const Leakage = () => {
         setTotalLeaks(res.data.total_leaks);
       } catch (err) {
         setError(err.message || 'Failed to fetch leakage data');
-        console.log("Failed to fetch leakage data", err.message);
+        /* console.log("Failed to fetch leakage data", err.message); */
       } finally {
         setDataLoading(false);
       }
@@ -658,11 +658,11 @@ const Leakage = () => {
     e.preventDefault();
     
     // Debug form values before validation
-    console.log('Main page form values before validation:', {
+    /* console.log('Main page form values before validation:', {
       date: resolvedForm.date,
       plumber: resolvedForm.plumber,
       note: resolvedForm.note,
-    });
+    }); */
     
     // Validation
     const errors = { date: '', plumber: '', note: '' };
@@ -709,16 +709,16 @@ const Leakage = () => {
         resolved_note: resolvedForm.note,
       };
       
-      console.log('Sending resolution data:', payload);
+      /* console.log('Sending resolution data:', payload); */
       const res = await resolveLeakage(payload);
-      console.log('Resolved leak response', res.data);
+      /* console.log('Resolved leak response', res.data); */
 
       // Update UI immediately
-      console.log('Main page saving resolved data:', {
+      /* console.log('Main page saving resolved data:', {
         date: payload.resolved_date,
         plumber: payload.plumber_name,
         note: payload.resolved_note,
-      });
+      }); */
       setResolvedData({
         date: payload.resolved_date,
         plumber: payload.plumber_name,
@@ -774,7 +774,7 @@ const Leakage = () => {
               setStatus(mapStatus(leak.status));
             }
           } catch (err) {
-            console.log("Failed to refetch recent leakage province data", err.message);
+            /* console.log("Failed to refetch recent leakage province data", err.message); */
           }
         })(),
         (async () => {
@@ -803,7 +803,7 @@ const Leakage = () => {
         (async () => refetch())()
       ]);
     } catch (err) {
-      console.error('Failed to save resolved leak', err);
+      /* console.error('Failed to save resolved leak', err); */
       let errorMessage = "Failed to resolve leakage.";
       if (err.response?.data?.message) {
         errorMessage = err.response.data.message;
@@ -1428,13 +1428,13 @@ const Leakage = () => {
         onClose={() => setShowResolvePopup(false)}
         leakageData={selectedLeakForResolve}
         onResolved={(resolvedLeakageId) => {
-          console.log('Modal onResolved called with ID:', resolvedLeakageId);
+          /* console.log('Modal onResolved called with ID:', resolvedLeakageId); */
           // Add the resolved leakage ID to the set
           if (resolvedLeakageId) {
-            console.log('Adding resolved leakage ID:', resolvedLeakageId);
+            /* console.log('Adding resolved leakage ID:', resolvedLeakageId); */
             setResolvedLeakageIds(prev => {
               const newSet = new Set([...prev, resolvedLeakageId]);
-              console.log('Updated resolvedLeakageIds:', newSet);
+              /* console.log('Updated resolvedLeakageIds:', newSet); */
               return newSet;
             });
           }

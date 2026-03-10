@@ -59,7 +59,7 @@ class GlobalWebSocketService {
       }
       return null;
     } catch (error) {
-      console.error('Error reading cookies:', error);
+      /* console.error('Error reading cookies:', error); */
       return null;
     }
   }
@@ -78,7 +78,7 @@ class GlobalWebSocketService {
       }
       return null;
     } catch (error) {
-      console.error('Error getting token via API:', error);
+      /* console.error('Error getting token via API:', error); */
       return null;
     }
   }
@@ -92,13 +92,13 @@ class GlobalWebSocketService {
       
       // If no token in cookies, try API fallback (for HttpOnly cookies)
       if (i === 1) { // Try API on second attempt
-        console.log('Cookie not readable, trying API fallback...');
+        /* console.log('Cookie not readable, trying API fallback...'); */
         const apiToken = await this.getTokenViaApi();
         if (apiToken) return apiToken;
       }
       
       if (i < maxRetries - 1) {
-        console.log(`Waiting for accessToken... attempt ${i + 1}/${maxRetries}`);
+        /* console.log(`Waiting for accessToken... attempt ${i + 1}/${maxRetries}`); */
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
@@ -152,13 +152,13 @@ class GlobalWebSocketService {
     // Wait for token with retry mechanism
     const accessToken = await this.waitForToken();
     if (!accessToken) {
-      console.log(`❌ WebSocket not started for ${province}: user not authenticated (no token)`);
+      /* console.log(`❌ WebSocket not started for ${province}: user not authenticated (no token)`); */
       return; // stop here
     }
 
-    console.log(`✅ Token retrieved for ${province}, connecting WebSocket...`);
+    /* console.log(`✅ Token retrieved for ${province}, connecting WebSocket...`); */
     wsUrl = `${WS_BASE}/ws/water-readings/${province}?token=${encodeURIComponent(accessToken)}`;
-    console.log(`🔗 WebSocket URL for ${province}: ${wsUrl.substring(0, 100)}...`);
+    /* console.log(`🔗 WebSocket URL for ${province}: ${wsUrl.substring(0, 100)}...`); */
 
     // console.log(`🌐 Creating global WebSocket connection: ${wsUrl}`);
     const socket = new WebSocket(wsUrl);
@@ -173,7 +173,7 @@ class GlobalWebSocketService {
     this.connections.set(province, connection);
 
     socket.onopen = () => {
-      console.log(`✅ Global WebSocket connected for ${province}: ${wsUrl.substring(0, 80)}...`);
+      /* console.log(`✅ Global WebSocket connected for ${province}: ${wsUrl.substring(0, 80)}...`); */
       connection.isConnected = true;
       connection.reconnectAttempts = 0;
     };
@@ -182,7 +182,7 @@ class GlobalWebSocketService {
       try {
         const data: WaterReadingData = JSON.parse(event.data);
         connection.lastMessageTime = Date.now();
-        console.log(`📊 Received data for ${province}:`, data);
+        /* console.log(`📊 Received data for ${province}:`, data); */
 
         // Notify all subscribers for this province
         const provinceSubscribers = this.subscribers.get(province);
@@ -191,27 +191,27 @@ class GlobalWebSocketService {
             try {
               callback(data);
             } catch (error) {
-              console.error(`Error in WebSocket subscriber for ${province}:`, error);
+              /* console.error(`Error in WebSocket subscriber for ${province}:`, error); */
             }
           });
         }
       } catch (error) {
-        console.error(`Error parsing WebSocket message for ${province}:`, error);
+        /* console.error(`Error parsing WebSocket message for ${province}:`, error); */
       }
     };
 
     socket.onerror = (error) => {
-      console.error(`❌ WebSocket error for ${province}:`, error);
+      /* console.error(`❌ WebSocket error for ${province}:`, error); */
       connection.isConnected = false;
     };
 
     socket.onclose = async (event) => {
-      console.log(`⚠️ WebSocket closed for ${province}. Code: ${event.code}, Reason: ${event.reason}`);
+      /* console.log(`⚠️ WebSocket closed for ${province}. Code: ${event.code}, Reason: ${event.reason}`); */
       connection.isConnected = false;
 
       // Handle token expiration (code 4001 from backend)
       if (event.code === 4001 && event.reason.includes('expired')) {
-        console.log('Access token expired, attempting to refresh');
+        /* console.log('Access token expired, attempting to refresh'); */
         try {
           await refreshAccessToken();
           // console.log('Token refresh successful, retrying WebSocket connection');
@@ -240,7 +240,7 @@ private scheduleReconnect(province: string): void {
   if (connection.reconnectAttempts >= this.maxReconnectAttempts) {
     // Optionally log only in development
     if (import.meta.env.MODE === "development") {
-      console.warn(`Max reconnect attempts reached for ${province}`);
+      /* console.warn(`Max reconnect attempts reached for ${province}`); */
     }
     return;
   }
@@ -348,10 +348,10 @@ export const debugCookieAvailability = async () => {
       credentials: 'include',
     });
     const data = await response.json();
-    console.log('🔍 Cookie Debug Info:', data);
+    /* console.log('🔍 Cookie Debug Info:', data); */
     return data;
   } catch (error) {
-    console.error('Debug cookie error:', error);
+    /* console.error('Debug cookie error:', error); */
     return null;
   }
 };

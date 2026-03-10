@@ -10,16 +10,16 @@ export const createWebSocket = (url, onMessage) => {
         const data = JSON.parse(event.data);
         onMessage(data);
       } catch (err) {
-        console.error("WebSocket message parse error:", err);
+        /* console.error("WebSocket message parse error:", err); */
       }
     };
   
     socket.onerror = (error) => {
-      console.error("❌ WebSocket error:", error);
+      /* console.error("❌ WebSocket error:", error); */
     };
   
     socket.onclose = () => {
-      console.log("⚠️ WebSocket closed:", url);
+      /* console.log("⚠️ WebSocket closed:", url); */
     };
   
     return socket;

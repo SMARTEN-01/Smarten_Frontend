@@ -32,10 +32,10 @@ async function fetchCsrfToken() {
     const response = await noAuthApi.get('/auth/get-csrf-token/');
     csrfToken = response.data.csrfToken;
     csrfTokenExpires = Date.now() + CSRF_TOKEN_LIFETIME; // Assume token is valid for 24 hours
-    console.log('Fetched CSRF token:', csrfToken);
+    /* console.log('Fetched CSRF token:', csrfToken); */
     return csrfToken;
   } catch (error) {
-    console.error('Failed to fetch CSRF token:', error.response?.data || error.message);
+    /* console.error('Failed to fetch CSRF token:', error.response?.data || error.message); */
     throw error;
   }
 }
@@ -66,9 +66,9 @@ api.interceptors.request.use(
       try {
         const token = await ensureCsrfToken();
         config.headers['X-CSRFToken'] = token;
-        console.log(`Added CSRF token to ${config.method.toUpperCase()} ${url}:`, token);
+        /* console.log(`Added CSRF token to ${config.method.toUpperCase()} ${url}:`, token); */
       } catch (error) {
-        console.error('Failed to add CSRF token:', error);
+        /* console.error('Failed to add CSRF token:', error); */
         throw error;
       }
     }
@@ -76,7 +76,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('Request interceptor error:', error);
+    /* console.error('Request interceptor error:', error); */
     return Promise.reject(error);
   }
 );
@@ -103,11 +103,11 @@ export async function refreshAccessToken() {
       .then(() => {
         // No tokens/user returned; cookies are set by backend
         localStorage.setItem('isAuthenticated', 'true');
-        console.log('Token refresh successful');
+        /* console.log('Token refresh successful'); */
         onRefreshed();
       })
       .catch((error) => {
-        console.error('Error during token refresh:', error.response?.data || error.message);
+        /* console.error('Error during token refresh:', error.response?.data || error.message); */
         localStorage.removeItem('user');
         localStorage.removeItem('isAuthenticated');
         throw error;
@@ -170,10 +170,10 @@ api.interceptors.response.use(
 
       try {
         await refreshAccessToken();
-        console.log("Retrying original request:", originalRequest.url);
+        /* console.log("Retrying original request:", originalRequest.url); */
         return api(originalRequest); // Retry with refreshed cookies
       } catch (refreshError) {
-        console.error("Token refresh failed, redirecting to login");
+        /* console.error("Token refresh failed, redirecting to login"); */
         localStorage.removeItem('user');
         localStorage.removeItem('isAuthenticated');
         window.location.href = "/login";
@@ -181,23 +181,23 @@ api.interceptors.response.use(
       }
     }
 
-    console.error(
+    /* console.error(
       `API error for ${originalRequest.method?.toUpperCase()} ${originalRequest.url}:`,
       error.response?.data || error.message
-    );
+    ); */
     return Promise.reject(error);
   }
 );
 
 // Authentication
 export const registerCompany = async (data) => {
-  console.log("registerCompany payload:", data);
+  /* console.log("registerCompany payload:", data); */
   try {
     const res = await noAuthApi.post('/auth/register/', data);
-    console.log('registerCompany response:', res.data);
+    /* console.log('registerCompany response:', res.data); */
     return res;
   } catch (error) {
-    console.error('registerCompany error:', error.response?.data || error.message);
+    /* console.error('registerCompany error:', error.response?.data || error.message); */
     throw error;
   }
 };
@@ -205,49 +205,49 @@ export const registerCompany = async (data) => {
 export const verifyEmail = (data) => noAuthApi.post("/auth/verify-email/", data);
 
 export const loginCompany = async (data) => {
-  console.log('loginCompany payload:', data);
+  /* console.log('loginCompany payload:', data); */
   try {
     const response = await noAuthApi.post('/auth/login/', data);
-    console.log('loginCompany response:', response.data);
+    /* console.log('loginCompany response:', response.data); */
     return response;
   } catch (error) {
-    console.error('loginCompany error:', error.response?.data || error.message);
+    /* console.error('loginCompany error:', error.response?.data || error.message); */
     throw error;
   }
 };
 
 export const logoutUser = async () => {
-  console.log('logoutUser: Sending POST /logout/');
+  /* console.log('logoutUser: Sending POST /logout/'); */
   try {
     const response = await noAuthApi.post('/auth/logout/', {});
-    console.log('logoutUser response:', response.data);
+    /* console.log('logoutUser response:', response.data); */
     return response;
   } catch (error) {
-    console.error('logoutUser error:', error.response?.data || error.message);
+    /* console.error('logoutUser error:', error.response?.data || error.message); */
     throw error;
   }
 };
 
 export const refreshToken = async () => {
-  console.log('refreshToken: Sending POST /refresh/');
+  /* console.log('refreshToken: Sending POST /refresh/'); */
   try {
     const response = await noAuthApi.post('/auth/refresh/', {});
-    console.log('refreshToken response:', response.data);
+    /* console.log('refreshToken response:', response.data); */
     return response;
   } catch (error) {
-    console.error('refreshToken error:', error.response?.data || error.message);
+    /* console.error('refreshToken error:', error.response?.data || error.message); */
     throw error;
   }
 };
 
 export const validateToken = async () => {
-  console.log('validateToken: Sending GET /validate-token/');
+  /* console.log('validateToken: Sending GET /validate-token/'); */
   try {
     const response = await noAuthApi.get('/auth/validate-token/');
-    console.log('validateToken response:', response.data);
+    /* console.log('validateToken response:', response.data); */
     return response;
   } catch (error) {
-    console.error('validateToken error:', error.response?.data || error.message);
+    /* console.error('validateToken error:', error.response?.data || error.message); */
     throw error;
   }
 };

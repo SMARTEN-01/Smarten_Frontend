@@ -81,7 +81,7 @@ const loadDataFromStorage = (): MonitorData => {
     
     // Check if data is from a different day
     if (parsed.currentDay !== currentDay) {
-      console.log('New day detected, clearing old data');
+      /* console.log('New day detected, clearing old data'); */
       return getDefaultData();
     }
     
@@ -91,13 +91,13 @@ const loadDataFromStorage = (): MonitorData => {
     const hoursDiff = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
     
     if (hoursDiff > 24) {
-      console.log('Data is too old, clearing');
+      /* console.log('Data is too old, clearing'); */
       return getDefaultData();
     }
     
     return parsed;
   } catch (error) {
-    console.error('Error loading monitor data from storage:', error);
+    /* console.error('Error loading monitor data from storage:', error); */
     return getDefaultData();
   }
 };
@@ -106,7 +106,7 @@ const saveDataToStorage = (data: MonitorData) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Error saving monitor data to storage:', error);
+    /* console.error('Error saving monitor data to storage:', error); */
   }
 };
 
@@ -208,7 +208,7 @@ export const MonitorDataProvider = ({ children }: { children: ReactNode }) => {
         }
         
       } catch (error) {
-        console.error('Error fetching initial monitor data:', error);
+        /* console.error('Error fetching initial monitor data:', error); */
       }
     };
     
@@ -222,7 +222,7 @@ export const MonitorDataProvider = ({ children }: { children: ReactNode }) => {
 
     provinces.forEach(province => {
       const unsubscribe = globalWebSocketService.subscribe(province, (data) => {
-        console.log(`📊 Received data for ${province}:`, data);
+        /* console.log(`📊 Received data for ${province}:`, data); */
         
         // Update water data
         const waterDataPoint: WaterDataPoint = {

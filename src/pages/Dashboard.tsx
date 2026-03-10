@@ -54,7 +54,7 @@ const Dashboard = () => {
         setLeakageLoading(true);
         setLeakageError('');
         const res = await getRecentLeak();
-        console.log("Received Recent Leakage Data ", res.data);
+        /* console.log("Received Recent Leakage Data ", res.data); */
         
         if (res.data.leak) {
           const leak = res.data.leak;
@@ -74,7 +74,7 @@ const Dashboard = () => {
         }
       } catch (err) {
         setLeakageError(err.message || 'Failed to fetch recent leakage data');
-        console.log("Failed to fetch recent leakage data", err.message);
+        /* console.log("Failed to fetch recent leakage data", err.message); */
         // Keep default values on error
       } finally {
         setLeakageLoading(false);
@@ -96,7 +96,7 @@ const Dashboard = () => {
         setStatsLoading(true);
         setStatsError('');
         const res = await getTotalLeakagesPerProvince();
-        console.log("Received Leakage Stats Data ", res.data);
+        /* console.log("Received Leakage Stats Data ", res.data); */
         
         if (res.data.provinces) {
           const stats = res.data.provinces.map(province => ({
@@ -110,7 +110,7 @@ const Dashboard = () => {
         }
       } catch (err) {
         setStatsError(err.message || 'Failed to fetch leakage statistics');
-        console.log("Failed to fetch leakage statistics", err.message);
+        /* console.log("Failed to fetch leakage statistics", err.message); */
         // Keep default values on error
       } finally {
         setStatsLoading(false);
@@ -132,7 +132,7 @@ const Dashboard = () => {
         setDeviceLoading(true);
         setDeviceError('');
         const res = await getDeviceCount();
-        console.log("Received Device Count Data ", res.data);
+        /* console.log("Received Device Count Data ", res.data); */
         
         if (res.data) {
           const devices = [
@@ -144,7 +144,7 @@ const Dashboard = () => {
         }
       } catch (err) {
         setDeviceError(err.message || 'Failed to fetch device data');
-        console.log("Failed to fetch device data", err.message);
+        /* console.log("Failed to fetch device data", err.message); */
         // Keep default values on error
         setDeviceData([
           { id: 1, type: 'ESP32', total: 0 },
@@ -171,7 +171,7 @@ const Dashboard = () => {
         setUserCountLoading(true);
         setUserCountError('');
         const res = await getUserCountPerProvince();
-        console.log("Received User Count Data ", res.data);
+        /* console.log("Received User Count Data ", res.data); */
         
         if (res.data && res.data.provinces) {
           const userCounts = res.data.provinces.map(province => ({
@@ -187,7 +187,7 @@ const Dashboard = () => {
         }
       } catch (err) {
         setUserCountError(err.message || 'Failed to fetch user count data');
-        console.log("Failed to fetch user count data", err.message);
+        /* console.log("Failed to fetch user count data", err.message); */
         // Keep default values on error
         setUserCountData([
           { region: 'North', value: 0, unit: 'users', bgColor: 'bg-yellow-50', textColor: 'text-yellow-500', iconText: 'N', iconSrc: '/assets/North.svg' },

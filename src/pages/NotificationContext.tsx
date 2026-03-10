@@ -117,20 +117,20 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
          };
 
         // Debug: Log the alert data and created notification
-        console.log('=== WEBSOCKET ALERT DEBUG ===');
-        console.log('WebSocket alert received:', alert);
-        console.log('Alert leak_id:', alert.leak_id);
-        console.log('Alert flow_rate_lph:', alert.flow_rate_lph);
-        console.log('Alert village:', alert.village);
-        console.log('Alert district:', alert.district);
-        console.log('Alert province:', alert.province);
-        console.log('Alert country:', alert.country);
-        console.log('Alert timestamp:', alert.timestamp);
-        console.log('Created notification:', newNotification);
-        console.log('Created notification with leakage_id:', newNotification.leakage_id);
-        console.log('Created notification water_lost:', newNotification.water_lost);
-        console.log('Created notification location:', newNotification.location);
-        console.log('=== END WEBSOCKET DEBUG ===');
+        /* console.log('=== WEBSOCKET ALERT DEBUG ==='); */
+        /* console.log('WebSocket alert received:', alert); */
+        /* console.log('Alert leak_id:', alert.leak_id); */
+        /* console.log('Alert flow_rate_lph:', alert.flow_rate_lph); */
+        /* console.log('Alert village:', alert.village); */
+        /* console.log('Alert district:', alert.district); */
+        /* console.log('Alert province:', alert.province); */
+        /* console.log('Alert country:', alert.country); */
+        /* console.log('Alert timestamp:', alert.timestamp); */
+        /* console.log('Created notification:', newNotification); */
+        /* console.log('Created notification with leakage_id:', newNotification.leakage_id); */
+        /* console.log('Created notification water_lost:', newNotification.water_lost); */
+        /* console.log('Created notification location:', newNotification.location); */
+        /* console.log('=== END WEBSOCKET DEBUG ==='); */
 
         setNotifications((prev) => {
           // If an item with same id and exact time exists, skip; otherwise append

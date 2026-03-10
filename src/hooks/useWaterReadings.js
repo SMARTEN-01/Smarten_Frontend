@@ -21,7 +21,7 @@ export const useWaterReadings = (province) => {
 
   useEffect(() => {
     if (!province) {
-      console.log("No province provided for WebSocket");
+      /* console.log("No province provided for WebSocket"); */
       setConnectionStatus('error');
       setErrorMessage('No province provided');
       return;
@@ -53,13 +53,13 @@ export const useWaterReadings = (province) => {
   }, [province]);
 
   useEffect(() => {
-    console.log("Updated waterData:", waterData);
-    console.log("Updated districtData:", districtData);
-    console.log("Updated criticalReadings:", criticalReadings);
-    console.log("Updated pastHour:", pastHour);
-    console.log("Updated dailyAverage:", dailyAverage);
-    console.log("Connection status:", connectionStatus, "Error:", errorMessage);
-    console.log("Data is stale:", isDataStale);
+    /* console.log("Updated waterData:", waterData); */
+    /* console.log("Updated districtData:", districtData); */
+    /* console.log("Updated criticalReadings:", criticalReadings); */
+    /* console.log("Updated pastHour:", pastHour); */
+    /* console.log("Updated dailyAverage:", dailyAverage); */
+    /* console.log("Connection status:", connectionStatus, "Error:", errorMessage); */
+    /* console.log("Data is stale:", isDataStale); */
   }, [waterData, districtData, criticalReadings, pastHour, dailyAverage, connectionStatus, errorMessage, isDataStale]);
 
   return { waterData, districtData, criticalReadings, pastHour, dailyAverage, connectionStatus, errorMessage, isDataStale };

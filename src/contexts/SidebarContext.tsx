@@ -42,7 +42,7 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
     try {
       localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(isCollapsed));
     } catch (error) {
-      console.warn('Failed to save sidebar state to localStorage:', error);
+      /* console.warn('Failed to save sidebar state to localStorage:', error); */
     }
   }, [isCollapsed]);
 
@@ -55,7 +55,7 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
       try {
         localStorage.removeItem(SIDEBAR_STATE_KEY);
       } catch (error) {
-        console.warn('Failed to clear sidebar state from localStorage:', error);
+        /* console.warn('Failed to clear sidebar state from localStorage:', error); */
       }
     }
   }, [authState.isAuthenticated]);
@@ -73,7 +73,7 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
     try {
       localStorage.removeItem(SIDEBAR_STATE_KEY);
     } catch (error) {
-      console.warn('Failed to clear sidebar state from localStorage:', error);
+      /* console.warn('Failed to clear sidebar state from localStorage:', error); */
     }
   };
 

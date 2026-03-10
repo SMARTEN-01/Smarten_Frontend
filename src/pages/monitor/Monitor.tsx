@@ -111,8 +111,8 @@ const Monitor = () => {
   const { waterData, districtData, criticalReadings, pastHour, dailyAverage, connectionStatus, errorMessage, isDataStale } = useWaterReadings(selectedProvince);
   const { clearData, getConnectionStatus } = useMonitorData();
   
-  console.log("Fetched real time data for", selectedProvince, ":", waterData);
-  console.log("Number of data points:", waterData.length);
+  /* console.log("Fetched real time data for", selectedProvince, ":", waterData); */
+  /* console.log("Number of data points:", waterData.length); */
   
   
   useEffect(() => {
@@ -190,7 +190,7 @@ const getLatestDistrictData = () => {
 };
 
 const latestDistrictData = getLatestDistrictData();  
-console.log(latestDistrictData)
+/* console.log(latestDistrictData) */
 
 // Pagination logic for history data
 const totalHistoryPages = Math.max(1, Math.ceil(latestDistrictData.length / HISTORY_PAGE_SIZE));
@@ -352,7 +352,7 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
       await simulateWater();
       // Optional: show a toast or message
     } catch (err) {
-      console.error('Error simulating water:', err);
+      /* console.error('Error simulating water:', err); */
       setIsSimulatingWater(false);
     }
   };
@@ -361,7 +361,7 @@ const getHistoricalDataForTimestamp = (timestamp: string) => {
     try {
       await stopSimulateWater();
     } catch (err) {
-      console.error('Error stopping water simulation:', err);
+      /* console.error('Error stopping water simulation:', err); */
     } finally {
       setIsSimulatingWater(false);
     }

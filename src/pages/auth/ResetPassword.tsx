@@ -17,8 +17,8 @@ const ResetPassword: React.FC = () => {
   const email = searchParams.get('email');
 
   useEffect(() => {
-    console.log('URL:', window.location.href); // Debug URL
-    console.log('Token:', token, 'Email:', email); // Debug params
+    /* console.log('URL:', window.location.href); */ // Debug URL
+    /* console.log('Token:', token, 'Email:', email); */ // Debug params
     if (!token || !email) {
       toast({
         title: 'Invalid Link',

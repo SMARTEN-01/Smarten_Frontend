@@ -60,15 +60,15 @@ const NotificationsPanel = ({ onClose }: NotificationsPanelProps) => {
   }, {});
 
   const handleNotificationClick = (notification: any) => {
-    console.log('=== NOTIFICATIONS PANEL CLICK DEBUG ===');
-    console.log('NotificationsPanel: Clicking notification:', notification);
-    console.log('NotificationsPanel: notification.leakage_id:', notification.leakage_id);
-    console.log('NotificationsPanel: notification.water_lost:', notification.water_lost);
-    console.log('NotificationsPanel: notification.location:', notification.location);
-    console.log('NotificationsPanel: notification.time:', notification.time);
-    console.log('NotificationsPanel: notification.timestamp:', notification.timestamp);
-    console.log('Full notification object keys:', Object.keys(notification));
-    console.log('=== END NOTIFICATIONS PANEL DEBUG ===');
+    /* console.log('=== NOTIFICATIONS PANEL CLICK DEBUG ==='); */
+    /* console.log('NotificationsPanel: Clicking notification:', notification); */
+    /* console.log('NotificationsPanel: notification.leakage_id:', notification.leakage_id); */
+    /* console.log('NotificationsPanel: notification.water_lost:', notification.water_lost); */
+    /* console.log('NotificationsPanel: notification.location:', notification.location); */
+    /* console.log('NotificationsPanel: notification.time:', notification.time); */
+    /* console.log('NotificationsPanel: notification.timestamp:', notification.timestamp); */
+    /* console.log('Full notification object keys:', Object.keys(notification)); */
+    /* console.log('=== END NOTIFICATIONS PANEL DEBUG ==='); */
     setSelectedNotification(notification);
     markAsRead(notification.id);
   };

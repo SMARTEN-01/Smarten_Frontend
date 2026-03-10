@@ -45,11 +45,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       const publicRoutes = ['/login', '/register', '/', '/forgot-password', '/verify-email', '/email-verified','/reset-password'];
       if (publicRoutes.includes(location.pathname)) {
-        console.log('Redirecting to /dashboard from:', location.pathname);
+        /* console.log('Redirecting to /dashboard from:', location.pathname); */
         navigate('/dashboard', { replace: true });
       }
     } catch (error: any) {
-      console.error('Token validation failed:', error.response?.data || error.message);
+      /* console.error('Token validation failed:', error.response?.data || error.message); */
       localStorage.removeItem('isAuthenticated');
       setAuthState({ accessToken: null, isAuthenticated: false});
       const publicRoutes = ['/login', '/register', '/', '/forgot-password'];
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: errorMessage,
         variant: 'destructive',
       });
-      console.error('Registration error:', error);
+      /* console.error('Registration error:', error); */
       throw error;
     }
   };
@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await logoutUser();
     } catch (error) {
-      console.error('Logout failed:', error);
+      /* console.error('Logout failed:', error); */
     } finally {
       if (refreshTimerId) {
         clearTimeout(refreshTimerId);

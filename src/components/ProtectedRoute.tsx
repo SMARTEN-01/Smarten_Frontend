@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const ProtectedRoute: React.FC = () => {
   const { authState } = useAuth();
-  console.log('ProtectedRoute authState:', authState);
+  /* console.log('ProtectedRoute authState:', authState); */
   if (!authState.isAuthenticated) {
     return <Navigate to="/login" replace />;
   }

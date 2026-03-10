@@ -20,7 +20,7 @@ export const useLeakAlerts = () => {
         
         // If no token in cookies, try API fallback (for HttpOnly cookies)
         if (i === 1) { // Try API on second attempt
-          console.log('Cookie not readable for leak alerts, trying API fallback...');
+          /* console.log('Cookie not readable for leak alerts, trying API fallback...'); */
           try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE}/auth/get-ws-token/`, {
               method: 'GET',
@@ -31,12 +31,12 @@ export const useLeakAlerts = () => {
               return data.token;
             }
           } catch (error) {
-            console.error('API fallback failed for leak alerts:', error);
+            /* console.error('API fallback failed for leak alerts:', error); */
           }
         }
         
         if (i < maxRetries - 1) {
-          console.log(`Waiting for accessToken for leak alerts... attempt ${i + 1}/${maxRetries}`);
+          /* console.log(`Waiting for accessToken for leak alerts... attempt ${i + 1}/${maxRetries}`); */
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
@@ -49,7 +49,7 @@ export const useLeakAlerts = () => {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log(`✅ WebSocket connected: ${WS_BASE}/ws/leak-alerts/`);
+      /* console.log(`✅ WebSocket connected: ${WS_BASE}/ws/leak-alerts/`); */
       reconnectAttempts.current = 0; // Reset reconnect attempts on successful connection
     };
 
@@ -60,24 +60,24 @@ export const useLeakAlerts = () => {
           setAlerts((prev) => [...prev, data]);
         }
       } catch (err) {
-        console.error("WebSocket message parse error:", err);
+        /* console.error("WebSocket message parse error:", err); */
       }
     };
 
     socket.onerror = (error) => {
-      console.error("❌ WebSocket error:", error);
+      /* console.error("❌ WebSocket error:", error); */
     };
 
     socket.onclose = () => {
-      console.log(`⚠️ WebSocket closed: ${WS_BASE}/ws/leak-alerts/`);
+      /* console.log(`⚠️ WebSocket closed: ${WS_BASE}/ws/leak-alerts/`); */
       if (reconnectAttempts.current < maxReconnectAttempts) {
         setTimeout(() => {
-          console.log(`Attempting to reconnect (${reconnectAttempts.current + 1}/${maxReconnectAttempts})...`);
+          /* console.log(`Attempting to reconnect (${reconnectAttempts.current + 1}/${maxReconnectAttempts})...`); */
           reconnectAttempts.current += 1;
           connectWebSocket();
         }, reconnectInterval);
       } else {
-        console.error("Max reconnect attempts reached. Please check the server.");
+        /* console.error("Max reconnect attempts reached. Please check the server."); */
       }
     };
   };
@@ -88,7 +88,7 @@ export const useLeakAlerts = () => {
     return () => {
       if (socketRef.current) {
         socketRef.current.close();
-        console.log("WebSocket connection closed on component unmount");
+        /* console.log("WebSocket connection closed on component unmount"); */
       }
     };
   }, []);

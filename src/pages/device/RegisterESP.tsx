@@ -53,7 +53,7 @@ const RegisterESP = () => {
     }, 2000);
       }
       catch(err){
-        console.log("Encountered error while registering an ESP32 ",err)
+        /* console.log("Encountered error while registering an ESP32 ",err) */
         toast({
           title: "Registration of ESP32 failed",
           description: "Please enter valid credentials",

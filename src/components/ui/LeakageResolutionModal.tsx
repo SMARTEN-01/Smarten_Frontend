@@ -50,7 +50,7 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
             setDetailedLeakageData(response.leakage);
           }
         } catch (error) {
-          console.error('Failed to fetch detailed leakage data:', error);
+          /* console.error('Failed to fetch detailed leakage data:', error); */
         }
       };
       fetchDetailedData();
@@ -82,11 +82,11 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
     e.preventDefault();
     
     // Debug form values before validation
-    console.log('Form values before validation:', {
+    /* console.log('Form values before validation:', {
       date: resolvedForm.date,
       plumber: resolvedForm.plumber,
       note: resolvedForm.note,
-    });
+    }); */
     
     // Validation
     const errors = { date: '', plumber: '', note: '' };
@@ -131,9 +131,9 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
         resolved_note: resolvedForm.note
       };
 
-      console.log('Sending resolution data:', resolutionData);
-      console.log('Leakage data ID:', leakageData.id);
-      console.log('Leakage data:', leakageData);
+      /* console.log('Sending resolution data:', resolutionData); */
+      /* console.log('Leakage data ID:', leakageData.id); */
+      /* console.log('Leakage data:', leakageData); */
       
       // Validate leakage ID
       if (!leakageData.id || leakageData.id <= 0) {
@@ -141,7 +141,7 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
       }
 
       const response = await resolveLeakage(resolutionData);
-      console.log('Resolution response:', response);
+      /* console.log('Resolution response:', response); */
       
       toast({
         title: "Leakage Resolved",
@@ -152,11 +152,11 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
       setSelectedStatus('resolved');
       
       // Save resolved data to display
-      console.log('Saving resolved data:', {
+      /* console.log('Saving resolved data:', {
         date: resolvedForm.date,
         plumber: resolvedForm.plumber,
         note: resolvedForm.note,
-      });
+      }); */
       setResolvedData({
         date: resolvedForm.date,
         plumber: resolvedForm.plumber,
@@ -168,16 +168,16 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
       setShowResolvedForm(false);
       
       // Call the callback to refresh data
-      console.log('Modal calling onResolved with leakageData:', leakageData);
+      /* console.log('Modal calling onResolved with leakageData:', leakageData); */
       onResolved(leakageData.id);
       
       // Don't auto-close modal - let user dismiss it manually
       
     } catch (error: any) {
-      console.error('Resolution error:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      console.error('Error headers:', error.response?.headers);
+      /* console.error('Resolution error:', error); */
+      /* console.error('Error response:', error.response?.data); */
+      /* console.error('Error status:', error.response?.status); */
+      /* console.error('Error headers:', error.response?.headers); */
       
       let errorMessage = "Failed to resolve leakage.";
       if (error.response?.data?.message) {
@@ -389,7 +389,7 @@ const LeakageResolutionModal: React.FC<LeakageResolutionModalProps> = ({
               )}
               {resolvedData && (
                 <div className="bg-[#338CF5] rounded-xl p-6 pb-14 relative flex flex-col gap-3 w-full max-w-md mx-auto animate-fade-in overflow-hidden" style={{minHeight: 240, margin: '20px 40px 20px 20px'}}>
-                  {console.log('Displaying resolved data:', resolvedData)}
+                  {/* console.log('Displaying resolved data:', resolvedData) */}
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-white text-base font-semibold">Resolved leakage</span>
                     <Edit3 size={20} className="text-white cursor-pointer hover:text-blue-200 transition-colors" />

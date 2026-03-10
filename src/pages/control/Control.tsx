@@ -191,7 +191,7 @@ const Control = () => {
       const location = type === 'province' ? { province: value } : { district: value };
       const response = await sendCommand({ command, location });
       const data = response.data || {};
-      console.log('API Response:', data);
+      /* console.log('API Response:', data); */
 
       const { message = 'No message', commands = [], error } = data;
 
@@ -241,7 +241,7 @@ const Control = () => {
         variant: (status === 'success' || status === 'partial_success') ? 'default' : 'destructive',
       });
     } catch (error: any) {
-      console.error('Error in handleCommand:', error.response?.data);
+      /* console.error('Error in handleCommand:', error.response?.data); */
       setError(error.response?.data?.error || 'Failed to send command');
       toast({
         title: 'Error',
@@ -261,7 +261,7 @@ const Control = () => {
   
     // Client-side validation and debug
     const { location, command, scheduled_date, scheduled_time } = formData;
-    console.log('FormData before submission:', { location, command, scheduled_date, scheduled_time }); // Debug log
+    /* console.log('FormData before submission:', { location, command, scheduled_date, scheduled_time }); */ // Debug log
   
     if (!location || !command || !scheduled_date || !scheduled_time) {
       setError('All fields (Location, Command, Date, and Time) are required.');
@@ -276,7 +276,7 @@ const Control = () => {
   
     try {
       const res = await ScheduledControl(formData);
-      console.log('ScheduledControl response:', res.data);
+      /* console.log('ScheduledControl response:', res.data); */
       setSuccess('✅ Scheduled Control created successfully!');
       toast({
         title: 'Scheduled Control created',
@@ -286,7 +286,7 @@ const Control = () => {
       setShowScheduleForm(false);
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.response?.data?.error || '❌ Scheduled Control failed';
-      console.log("Scheduled Control failed",error)
+      /* console.log("Scheduled Control failed",error) */
       setError(errorMessage);
       toast({
         title: 'Scheduled Control failed',
@@ -310,10 +310,10 @@ const Control = () => {
     const fetchProvinceCommandCounts = async () => {
       try {
         const res = await getProvinceCommandCount();
-        console.log("Received Province Command Counts ", res.data);
+        /* console.log("Received Province Command Counts ", res.data); */
         setProvinceCommandCounts(res.data);
       } catch (err) {
-        console.error("Error fetching province command counts:", err);
+        /* console.error("Error fetching province command counts:", err); */
         setError('Failed to load province command counts');
       }
     };
@@ -338,11 +338,11 @@ const Control = () => {
       try {
         setIsLoading(true)
         const res = await getAllCommands();
-        console.log("Received Command History ", res.data);
+        /* console.log("Received Command History ", res.data); */
         setHistoryTableData(res.data)
       } catch (err: any) {
         setError(err.message || 'Failed to fetch  Command History');
-        console.log("Failed to fetch  Command History",err.message)
+        /* console.log("Failed to fetch  Command History",err.message) */
       }
       finally{
         setIsLoading(false)
@@ -357,11 +357,11 @@ const Control = () => {
       try {
         setIsLoading(true)
         const res = await getTodayScheduledControls();
-        console.log("Received Today Scheduled Control ", res.data);
+        /* console.log("Received Today Scheduled Control ", res.data); */
         setTodayScheduledControl(res.data);
       } catch (err: any) {
         setError(err.message || 'Failed to fetch scheduled controls');
-        console.log("Failed to fetch scheduled controls",err.message)
+        /* console.log("Failed to fetch scheduled controls",err.message) */
       }
       finally{
         setIsLoading(false)
@@ -379,21 +379,21 @@ const Control = () => {
 
   const getRegionStyle = (locationKey: string) => {
     if (!locationKey) {
-      console.debug('getRegionStyle: No locationKey provided, using default');
+      /* console.debug('getRegionStyle: No locationKey provided, using default'); */
       return { icon: NorthIcon, color: '#6B7280' };
     }
     const province = districtToProvince[locationKey] || locationKey.split(':')[1];
     if (!province) {
-      console.debug('getRegionStyle: No province found for locationKey:', locationKey);
+      /* console.debug('getRegionStyle: No province found for locationKey:', locationKey); */
       return { icon: NorthIcon, color: '#6B7280' };
     }
     const normalizedProvince = province.trim();
     const style = regionStyles[normalizedProvince];
     if (!style) {
-      console.debug('getRegionStyle: No style found for province:', normalizedProvince);
+      /* console.debug('getRegionStyle: No style found for province:', normalizedProvince); */
       return { icon: NorthIcon, color: '#6B7280' };
     }
-    console.debug('getRegionStyle: Found style for province:', normalizedProvince, style);
+    /* console.debug('getRegionStyle: Found style for province:', normalizedProvince, style); */
     return style;
   };
 

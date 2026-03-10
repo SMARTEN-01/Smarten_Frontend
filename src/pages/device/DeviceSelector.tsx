@@ -56,10 +56,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalEspPerProvince();
-        console.log("[Devices] Received total number of ESP per province ", res.data);
+        /* console.log("[Devices] Received total number of ESP per province ", res.data); */
         setNumberEspProvince(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of ESP per province ", err.message);
+        /* console.log("Error while fetching total number of ESP per province ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -74,10 +74,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalSensorPerProvince();
-        console.log("[Devices] Received total number of Sensors per province ", res.data);
+        /* console.log("[Devices] Received total number of Sensors per province ", res.data); */
         setNumberSensorProvince(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of Sensors per province ", err.message);
+        /* console.log("Error while fetching total number of Sensors per province ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -92,10 +92,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalSmartValvePerProvince();
-        console.log("[Devices] Received total number of Smart Valve per province ", res.data);
+        /* console.log("[Devices] Received total number of Smart Valve per province ", res.data); */
         setNumberSmartValveProvince(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of Smart Valve per province ", err.message);
+        /* console.log("Error while fetching total number of Smart Valve per province ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -111,10 +111,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalEspPerDistrict(selectedRegion);
-        console.log("[Devices] Received total number of ESP32 per district ", res.data);
+        /* console.log("[Devices] Received total number of ESP32 per district ", res.data); */
         setNumberEsp32District(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of ESP32 per district ", err.message);
+        /* console.log("Error while fetching total number of ESP32 per district ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -130,10 +130,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalSensorPerDistrict(selectedRegion);
-        console.log("[Devices] Received total number of sensors per district ", res.data);
+        /* console.log("[Devices] Received total number of sensors per district ", res.data); */
         setNumberSensorDistrict(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of sensors per district ", err.message);
+        /* console.log("Error while fetching total number of sensors per district ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -149,10 +149,10 @@ const DeviceSelector = () => {
       try {
         setIsLoading(true);
         const res = await TotalSmartValvePerDistrict(selectedRegion);
-        console.log("[Devices] Received total number of smart valve per district ", res.data);
+        /* console.log("[Devices] Received total number of smart valve per district ", res.data); */
         setNumberSmartValveDistrict(res.data);
       } catch (err: any) {
-        console.log("Error while fetching total number of smart valve per district ", err.message);
+        /* console.log("Error while fetching total number of smart valve per district ", err.message); */
         setError(err.message);
       } finally {
         setIsLoading(false);
