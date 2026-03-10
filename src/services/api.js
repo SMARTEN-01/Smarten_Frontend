@@ -32,10 +32,10 @@ async function fetchCsrfToken() {
     const response = await noAuthApi.get('/auth/get-csrf-token/');
     csrfToken = response.data.csrfToken;
     csrfTokenExpires = Date.now() + CSRF_TOKEN_LIFETIME; // Assume token is valid for 24 hours
-    /* console.log('Fetched CSRF token:', csrfToken); */
+    console.log('Fetched CSRF token:', csrfToken);
     return csrfToken;
   } catch (error) {
-    /* console.error('Failed to fetch CSRF token:', error.response?.data || error.message); */
+    console.error('Failed to fetch CSRF token:', error.response?.data || error.message);
     throw error;
   }
 }
@@ -66,9 +66,9 @@ api.interceptors.request.use(
       try {
         const token = await ensureCsrfToken();
         config.headers['X-CSRFToken'] = token;
-        /* console.log(`Added CSRF token to ${config.method.toUpperCase()} ${url}:`, token); */
+        console.log(`Added CSRF token to ${config.method.toUpperCase()} ${url}:`, token);
       } catch (error) {
-        /* console.error('Failed to add CSRF token:', error); */
+        console.error('Failed to add CSRF token:', error);
         throw error;
       }
     }
@@ -76,7 +76,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    /* console.error('Request interceptor error:', error); */
+    console.error('Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -181,23 +181,23 @@ api.interceptors.response.use(
       }
     }
 
-    /* console.error(
+    console.error(
       `API error for ${originalRequest.method?.toUpperCase()} ${originalRequest.url}:`,
       error.response?.data || error.message
-    ); */
+    );
     return Promise.reject(error);
   }
 );
 
 // Authentication
 export const registerCompany = async (data) => {
-  /* console.log("registerCompany payload:", data); */
+  console.log("registerCompany payload:", data);
   try {
     const res = await noAuthApi.post('/auth/register/', data);
-    /* console.log('registerCompany response:', res.data); */
+    console.log('registerCompany response:', res.data);
     return res;
   } catch (error) {
-    /* console.error('registerCompany error:', error.response?.data || error.message); */
+    console.error('registerCompany error:', error.response?.data || error.message);
     throw error;
   }
 };

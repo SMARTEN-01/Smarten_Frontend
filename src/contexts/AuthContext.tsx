@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: errorMessage,
         variant: 'destructive',
       });
-      /* console.error('Registration error:', error); */
+      console.error('Registration error:', error);
       throw error;
     }
   };

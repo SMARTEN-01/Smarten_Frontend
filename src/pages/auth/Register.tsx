@@ -92,7 +92,7 @@ const Register = () => {
         });
       }
       
-      /* console.log("Registration failed ", error); */
+      console.log("Registration failed ", error);
     }
     finally {
       setIsLoading(false);
